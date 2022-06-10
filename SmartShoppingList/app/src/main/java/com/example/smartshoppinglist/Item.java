@@ -2,32 +2,20 @@ package com.example.smartshoppinglist;
 
 public class Item
 {
-	private int posX;
-	private int posY;
+	private Vector2 pos;
 
 	public Item(int posX, int posY)
 	{
-		this.posX = posX;
-		this.posY = posY;
+		pos = new Vector2(posX, posY);
 	}
 
-	public int getPosX()
+	public Item(Vector2 position)
 	{
-		return posX;
+		this.pos = position;
 	}
 
-	public void setPosX(int posX)
+	public Vector2 getPosition()
 	{
-		this.posX = posX;
-	}
-
-	public int getPosY()
-	{
-		return posY;
-	}
-
-	public void setPosY(int posY)
-	{
-		this.posY = posY;
+		return pos;
 	}
 }
