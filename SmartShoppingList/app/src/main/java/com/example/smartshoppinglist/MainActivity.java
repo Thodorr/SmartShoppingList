@@ -2,53 +2,81 @@ package com.example.smartshoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import processing.android.CompatUtils;
-import processing.android.PFragment;
-import processing.core.PApplet;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
 {
-	private PApplet sketch;
+	private Button btnRefresh;
+	private Button btnAdd;
+	private ListView listView;
+
+	private ArrayList<Item> itemList;
+	private ItemListAdapter viewAdapter;
+
+	private int counter = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		FrameLayout frame = new FrameLayout(this);
-		frame.setId(CompatUtils.getUniqueViewId());
-		setContentView(frame, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.MATCH_PARENT));
+		setContentView(R.layout.activity_main);
 
-		sketch = new ProcessingTest();
-		PFragment fragment = new PFragment(sketch);
-		fragment.setView(frame, this);
+		btnRefresh = findViewById(R.id.btnRefresh);
+		btnAdd = findViewById(R.id.btnAdd);
+		listView = findViewById(R.id.listView);
+
+		itemList = new ArrayList<Item>();
+		viewAdapter = new ItemListAdapter(this, itemList);
+		listView.setAdapter(viewAdapter);
+
+		initBtns();
 	}
 
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+	private void initBtns()
 	{
-		if (sketch != null)
+		if(btnAdd == null || btnRefresh == null)
 		{
-			sketch.onRequestPermissionsResult(
-					requestCode, permissions, grantResults);
+			return;
 		}
-		else
+
+		btnAdd.setOnClickListener(new View.OnClickListener()
 		{
-			super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		}
+			@Override
+			public void onClick(View view)
+			{
+				Item item = new Item("#" + counter + " HalloWelt", Vector2.random(0f, 100f));
+				System.out.println("Pos: " + item.getPosition().toString());
+				counter++;
+				itemList.add(item);
+				viewAdapter.notifyDataSetChanged();
+			}
+		});
+
+		btnRefresh.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View view)
+			{
+				refreshList();
+				//viewAdapter.notifyDataSetChanged();
+				viewAdapter = new ItemListAdapter(MainActivity.this, itemList);
+				listView.setAdapter(viewAdapter);
+			}
+		});
 	}
 
-	@Override
-	public void onNewIntent(Intent intent)
+	private void refreshList()
 	{
-		super.onNewIntent(intent);
-		if (sketch != null) {
-			sketch.onNewIntent(intent);
-		}
+		System.out.println(itemList.toString());
+		itemList = ListSorter.sortGenetic(itemList, 500, 100);
+		System.out.println(itemList.toString());
 	}
 }

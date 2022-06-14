@@ -90,7 +90,7 @@ public class GeneticAlgorithm
 		int index = 0;
 		float r = (float) Math.random();
 
-		while (r > 0)
+		while (r > 0 && index < fitness.length)
 		{
 			r -= fitness[index];
 			index++;

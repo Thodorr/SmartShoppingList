@@ -27,7 +27,7 @@ public class ProcessingTest extends PApplet
 		for (int i = 0; i < totalItems; i++)
 		{
 			PVector v = new PVector(random(width), random(height / 2));
-			items[i] = new Item(new Vector2(v.x, v.y));
+			items[i] = new Item("", new Vector2(v.x, v.y));
 			order.add(i);
 		}
 

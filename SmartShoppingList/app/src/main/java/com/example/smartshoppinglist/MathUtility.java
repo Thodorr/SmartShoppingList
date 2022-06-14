@@ -5,8 +5,22 @@ import java.util.List;
 
 public abstract class MathUtility
 {
+	/***
+	 * Returns a float within min (inclusive) and max (inclusive).
+	 * If min > max the values are automatically swapped.
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public static float randomRange(float min, float max)
 	{
+		if(min > max)
+		{
+			float tmp = min;
+			min = max;
+			max = min;
+		}
+
 		float range = max - min;
 		float random = (float) Math.floor(Math.random() * range);
 
