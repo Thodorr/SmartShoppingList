@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/item_list_layout.xml" value="0.25" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/sketch_layout.xml" value="0.14722222222222223" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34193840579710144" />
         <entry key="app/src/main/res/layout/item_list_layout.xml" value="0.25" />
       </map>

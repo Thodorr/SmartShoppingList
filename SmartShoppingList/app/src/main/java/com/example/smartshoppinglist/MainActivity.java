@@ -1,6 +1,8 @@
 package com.example.smartshoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity
 
 	private ArrayList<Item> itemList;
 	private ItemListAdapter viewAdapter;
+	private ItemAdapter itemAdapter;
 
 	private int counter = 0;
 
@@ -31,11 +34,17 @@ public class MainActivity extends AppCompatActivity
 
 		btnRefresh = findViewById(R.id.btnRefresh);
 		btnAdd = findViewById(R.id.btnAdd);
-		listView = findViewById(R.id.listView);
 
 		itemList = new ArrayList<Item>();
-		viewAdapter = new ItemListAdapter(this, itemList);
-		listView.setAdapter(viewAdapter);
+
+		if (itemList.isEmpty()) {
+			itemList.add(new Item("Test", new Vector2(0,0)));
+		}
+
+		RecyclerView listHolder = findViewById(R.id.itemListView);
+		itemAdapter = new ItemAdapter(itemList);
+		listHolder.setAdapter(itemAdapter);
+		listHolder.setLayoutManager(new LinearLayoutManager(this));
 
 		initBtns();
 	}
@@ -55,8 +64,7 @@ public class MainActivity extends AppCompatActivity
 				Item item = new Item("#" + counter + " HalloWelt", Vector2.random(0f, 100f));
 				System.out.println("Pos: " + item.getPosition().toString());
 				counter++;
-				itemList.add(item);
-				viewAdapter.notifyDataSetChanged();
+				itemAdapter.add(item);
 			}
 		});
 
@@ -65,18 +73,8 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			public void onClick(View view)
 			{
-				refreshList();
-				//viewAdapter.notifyDataSetChanged();
-				viewAdapter = new ItemListAdapter(MainActivity.this, itemList);
-				listView.setAdapter(viewAdapter);
+				itemAdapter.refreshList();
 			}
 		});
-	}
-
-	private void refreshList()
-	{
-		System.out.println(itemList.toString());
-		itemList = ListSorter.sortGenetic(itemList, 500, 100);
-		System.out.println(itemList.toString());
 	}
 }
