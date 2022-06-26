@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity
 	private ListView listView;
 
 	private ArrayList<Item> itemList;
-	private ItemListAdapter viewAdapter;
-	private ItemAdapter itemAdapter;
+	private ItemListAdapter itemAdapter;
 
 	private int counter = 0;
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity
 		}
 
 		RecyclerView listHolder = findViewById(R.id.itemListView);
-		itemAdapter = new ItemAdapter(itemList);
+		itemAdapter = new ItemListAdapter(itemList);
 		listHolder.setAdapter(itemAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
 
@@ -64,7 +63,8 @@ public class MainActivity extends AppCompatActivity
 				Item item = new Item("#" + counter + " HalloWelt", Vector2.random(0f, 100f));
 				System.out.println("Pos: " + item.getPosition().toString());
 				counter++;
-				itemAdapter.add(item);
+				itemAdapter.getEintraege_liste().add(item);
+				itemAdapter.notifyDataSetChanged();
 			}
 		});
 

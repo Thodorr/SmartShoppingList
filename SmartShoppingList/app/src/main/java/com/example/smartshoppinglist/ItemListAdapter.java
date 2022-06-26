@@ -6,48 +6,122 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ItemListAdapter extends ArrayAdapter<Item>
+public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>
 {
+	private ArrayList<Item> eintraege_liste;
+	private boolean on_bind = false;
 
-	public ItemListAdapter(@NonNull Context context, ArrayList<Item> list)
+	public ItemListAdapter(ArrayList<Item> eintraege_liste)
 	{
-		super(context, 0, list);
+		super();
+		this.eintraege_liste = eintraege_liste;
 	}
 
 	@Override
-	public View getView(final int pos, View convertView, ViewGroup parent)
+	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
 	{
-		View elem = null;
+		// create a new view
+		// TODO cast to ConstraintLayout not possible
+		LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.item_list_layout, parent, false);
+		MyViewHolder vh = new MyViewHolder(v);
+		return vh;
+	}
 
-		if(elem == null)
+	@Override
+	public void onBindViewHolder(MyViewHolder holder, int position)
+	{
+		on_bind = true;
+		holder.getTextView().setText(eintraege_liste.get(position).getName());
+		holder.getSwitchview().setChecked(eintraege_liste.get(position).isChecked());
+		on_bind = false;
+	}
+
+	@Override
+	public int getItemCount()
+	{
+		return eintraege_liste.size();
+	}
+
+	public ArrayList<Item> getEintraege_liste()
+	{
+		return eintraege_liste;
+	}
+
+	public void refreshList()
+	{
+		eintraege_liste = ListSorter.sortGenetic(eintraege_liste, 500, 100);
+		notifyDataSetChanged();
+	}
+
+	public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, CompoundButton.OnCheckedChangeListener
+	{
+
+		public LinearLayout cl;
+		public Switch switchv;
+		public TextView tv;
+
+		public MyViewHolder(LinearLayout v)
 		{
-			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			elem = inflater.inflate(R.layout.item_list_layout, null);
+			super(v);
+			v.setOnClickListener(this);
+			v.setOnLongClickListener(this);
+			cl = v;
+			switchv = cl.findViewById(R.id.switchView);
+			switchv.setOnCheckedChangeListener(this);
+			tv = cl.findViewById(R.id.textView);
 		}
 
-		Item item = getItem(pos);
-
-		Switch switchView = (Switch) elem.findViewById(R.id.switchView);
-		switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+		public Switch getSwitchview()
 		{
-			@Override
-			public void onCheckedChanged(CompoundButton btn, boolean isChecked)
-			{
-				item.setChecked(isChecked);
+			return switchv;
+		}
+
+		public TextView getTextView()
+		{
+			return tv;
+		}
+
+		@Override
+		public void onClick(View view)
+		{
+
+		}
+
+		@Override
+		public boolean onLongClick(View view)
+		{
+			/*
+			int position = getAdapterPosition();
+			eintraege_liste.remove(eintraege_liste.get(position));
+			notifyItemRemoved(position);
+			*/
+			return false;
+		}
+
+		@Override
+		public void onCheckedChanged(CompoundButton compoundButton, boolean b)
+		{
+			int position = getAdapterPosition();
+			if (!b && eintraege_liste.get(position).isChecked()) {
+				eintraege_liste.get(position).setName(eintraege_liste.get(position).getName() + " (erledigt)");
+				eintraege_liste.get(position).setChecked(false);
 			}
-		});
-		switchView.setChecked(item.isChecked());
-
-		TextView textView = (TextView) elem.findViewById(R.id.textView);
-		textView.setText(getItem(pos).getName());
-
-		return elem;
+			if (b && !eintraege_liste.get(getAdapterPosition()).isChecked()) {
+				eintraege_liste.get(position).setName(eintraege_liste.get(position).getName().replaceAll(" \\(erledigt\\)", "").toString());
+				eintraege_liste.get(position).setChecked(true);
+			}
+			if (!on_bind) notifyItemChanged(position);
+		}
 	}
 }
