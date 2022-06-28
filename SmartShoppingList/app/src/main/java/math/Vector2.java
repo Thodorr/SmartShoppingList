@@ -1,4 +1,4 @@
-package com.example.smartshoppinglist;
+package math;
 
 public class Vector2
 {

@@ -1,8 +1,11 @@
-package com.example.smartshoppinglist;
+package core;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import core.GeneticAlgorithm;
+import core.Item;
 
 public class TravelingSalesman
 {

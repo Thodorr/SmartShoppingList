@@ -1,20 +1,21 @@
-package com.example.smartshoppinglist;
+package ui;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import core.ListSorter;
+import com.example.smartshoppinglist.R;
+
 import java.util.ArrayList;
+
+import core.Item;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>
 {

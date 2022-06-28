@@ -1,4 +1,4 @@
-package com.example.smartshoppinglist;
+package ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package com.example.smartshoppinglist;
+package math;
 
 import java.util.ArrayList;
 import java.util.List;

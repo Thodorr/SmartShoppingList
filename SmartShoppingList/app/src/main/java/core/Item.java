@@ -1,4 +1,6 @@
-package com.example.smartshoppinglist;
+package core;
+
+import math.Vector2;
 
 public class Item
 {

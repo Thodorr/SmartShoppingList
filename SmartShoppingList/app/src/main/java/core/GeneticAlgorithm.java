@@ -1,6 +1,7 @@
-package com.example.smartshoppinglist;
+package core;
 
-import java.sql.Array;
+import math.MathUtility;
+
 import java.util.ArrayList;
 import java.util.List;
 

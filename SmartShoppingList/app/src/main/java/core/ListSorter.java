@@ -1,10 +1,11 @@
-package com.example.smartshoppinglist;
+package core;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import processing.core.PVector;
+import core.GeneticAlgorithm;
+import core.Item;
 
 public abstract class ListSorter
 {

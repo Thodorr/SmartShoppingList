@@ -1,9 +1,12 @@
-package com.example.smartshoppinglist;
+package ui;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import core.GeneticAlgorithm;
+import core.Item;
+import math.Vector2;
 import processing.core.PApplet;
 import processing.core.PVector;
 
