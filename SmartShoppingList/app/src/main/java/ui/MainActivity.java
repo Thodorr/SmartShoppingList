@@ -68,12 +68,21 @@ public class MainActivity extends AppCompatActivity
 						if(result.getResultCode() == Activity.RESULT_OK)
 						{
 							Intent data = result.getData();
-							if(data == null)
+							if(data == null || !data.hasExtra(ScannerActivity.RETURN_VALUE))
+							{
+								return;
+							}
+
+							// TODO: handle scanner result data
+							Bundle bundle = data.getExtras();
+							Item item = (Item) bundle.getParcelable(ScannerActivity.RETURN_VALUE);
+
+							if(item == null)
 							{
 								System.out.println("Scanner returned null");
 								return;
 							}
-							// TODO: handle scanner result data
+							System.out.println(item.toString());
 						}
 					}
 				}

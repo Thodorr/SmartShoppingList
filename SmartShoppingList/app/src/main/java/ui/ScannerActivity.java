@@ -72,6 +72,8 @@ public class ScannerActivity extends AppCompatActivity
 
 		surfaceView = findViewById(R.id.surfaceView);
 		barcodeText = findViewById(R.id.textCode);
+
+		initialiseDetectorsAndSources();
 	}
 
 	@Override
