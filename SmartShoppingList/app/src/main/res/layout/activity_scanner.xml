@@ -16,7 +16,15 @@
         android:id="@+id/textCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BarcodeText" />
+        android:text="Barcode ID"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/lblName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Item Name:"
+        android:textAlignment="textStart" />
 
     <EditText
         android:id="@+id/editName"
@@ -25,7 +33,14 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="Name" />
+        android:text="Scan" />
+
+    <TextView
+        android:id="@+id/lblPosX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pos X:"
+        android:textAlignment="textStart" />
 
     <EditText
         android:id="@+id/editPosX"
@@ -33,7 +48,14 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:text="PosX" />
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/lblPosY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pos Y:"
+        android:textAlignment="textStart" />
 
     <EditText
         android:id="@+id/editPosY"
@@ -41,7 +63,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:text="PosY" />
+        android:text="0.0" />
 
     <Button
         android:id="@+id/btnBack"

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity
 	private Button btnRefresh;
 	private Button btnAdd;
 	private Button btnScan;
-	private ListView listView;
+	private RecyclerView listHolder;
 
 	private ArrayList<Item> itemList;
 	private ItemListAdapter itemAdapter;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 			itemList.add(new Item("Test", new Vector2(0,0)));
 		}
 
-		RecyclerView listHolder = findViewById(R.id.itemListView);
+		listHolder = findViewById(R.id.itemListView);
 		itemAdapter = new ItemListAdapter(itemList);
 		listHolder.setAdapter(itemAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity
 								return;
 							}
 							System.out.println(item.toString());
+							addItemToList(item);
 						}
 					}
 				}
@@ -106,8 +107,7 @@ public class MainActivity extends AppCompatActivity
 				Item item = new Item("#" + counter + " HalloWelt");
 				System.out.println("Pos: " + item.getPosition().toString());
 				counter++;
-				itemAdapter.getEintraege_liste().add(item);
-				itemAdapter.notifyDataSetChanged();
+				addItemToList(item);
 			}
 		});
 
@@ -129,5 +129,11 @@ public class MainActivity extends AppCompatActivity
 				itemAdapter.refreshList();
 			}
 		});
+	}
+
+	private void addItemToList(Item item)
+	{
+		itemAdapter.getEintraege_liste().add(item);
+		itemAdapter.notifyDataSetChanged();
 	}
 }

@@ -95,7 +95,7 @@ public class ScannerActivity extends AppCompatActivity
 				.build();
 
 		cameraSource = new CameraSource.Builder(this, barcodeDetector)
-				.setRequestedPreviewSize(1920, 1080)
+				.setRequestedPreviewSize(1920, 1440)
 				.setAutoFocusEnabled(true) //you should add this feature
 				.build();
 
@@ -157,26 +157,28 @@ public class ScannerActivity extends AppCompatActivity
 						@Override
 						public void run()
 						{
-							if (barcodes.valueAt(0).email != null)
-							{
-								barcodeText.removeCallbacks(null);
-								barcodeData = barcodes.valueAt(0).email.address;
-								barcodeText.setText(barcodeData);
-								//toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
-							}
-							else
-							{
-								barcodeData = barcodes.valueAt(0).displayValue;
-								barcodeText.setText(barcodeData);
-								//toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
-								// TODO: make database entry
-								String name = editName.getText().toString();
-								name = name.isEmpty() ? "Scan" : name;
-								float posX = Float.parseFloat(editPosX.getText().toString());
-								float posY = Float.parseFloat(editPosY.getText().toString());
+							barcodeData = barcodes.valueAt(0).displayValue;
+							barcodeText.setText(barcodeData);
+							toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
+							// TODO: make database entry
+							String name = editName.getText().toString();
+							name = name.isEmpty() ? "Scan" : name;
+							float posX = 0f;
+							float posY = 0f;
 
-								scannedItem = new Item(name, posX, posY);
+							try
+							{
+								posX = Float.parseFloat(editPosX.getText().toString());
+								posY = Float.parseFloat(editPosY.getText().toString());
 							}
+							catch(NumberFormatException e)
+							{
+								posX = 0f;
+								posY = 0f;
+							}
+
+							scannedItem = new Item(name, posX, posY);
+							System.out.println(scannedItem.toString());
 						}
 					});
 				}
