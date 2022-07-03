@@ -8,6 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import core.ListSorter;
@@ -17,20 +20,14 @@ import java.util.ArrayList;
 
 import core.Item;
 
-public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>
-{
-	private ArrayList<Item> eintraege_liste;
-	private boolean on_bind = false;
+public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHolder> {
 
-	public ItemListAdapter(ArrayList<Item> eintraege_liste)
-	{
-		super();
-		this.eintraege_liste = eintraege_liste;
+	protected ItemListAdapter() {
+		super(new Item.DiffUtil());
 	}
 
 	@Override
-	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-	{
+	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		// create a new view
 		// TODO cast to ConstraintLayout not possible
 		LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
@@ -40,89 +37,38 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
 	}
 
 	@Override
-	public void onBindViewHolder(MyViewHolder holder, int position)
-	{
-		on_bind = true;
-		holder.getTextView().setText(eintraege_liste.get(position).getName());
-		holder.getSwitchview().setChecked(eintraege_liste.get(position).isChecked());
-		on_bind = false;
+	public void onBindViewHolder(MyViewHolder holder, int position) {
+		Item item = getItem(position);
+		holder.setItem(item);
 	}
 
-	@Override
-	public int getItemCount()
-	{
-		return eintraege_liste.size();
-	}
-
-	public ArrayList<Item> getEintraege_liste()
-	{
-		return eintraege_liste;
-	}
-
-	public void refreshList()
-	{
-		eintraege_liste = ListSorter.sortGenetic(eintraege_liste, 500, 100);
-		notifyDataSetChanged();
-	}
-
-	public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, CompoundButton.OnCheckedChangeListener
-	{
-
+	public class MyViewHolder extends RecyclerView.ViewHolder {
 		public LinearLayout cl;
-		public Switch switchv;
-		public TextView tv;
+		private Switch switchv;
+		private TextView tv;
+		private Item item;
 
 		public MyViewHolder(LinearLayout v)
 		{
 			super(v);
-			v.setOnClickListener(this);
-			v.setOnLongClickListener(this);
+			v.setOnClickListener(v1 -> {
+
+			});
+			v.setOnLongClickListener(v12 -> {
+				return false;
+			});
 			cl = v;
 			switchv = cl.findViewById(R.id.switchView);
-			switchv.setOnCheckedChangeListener(this);
+			switchv.setOnCheckedChangeListener((buttonView, isChecked) -> {
+				item.setChecked(isChecked);
+			});
 			tv = cl.findViewById(R.id.textView);
 		}
 
-		public Switch getSwitchview()
-		{
-			return switchv;
-		}
-
-		public TextView getTextView()
-		{
-			return tv;
-		}
-
-		@Override
-		public void onClick(View view)
-		{
-
-		}
-
-		@Override
-		public boolean onLongClick(View view)
-		{
-			/*
-			int position = getAdapterPosition();
-			eintraege_liste.remove(eintraege_liste.get(position));
-			notifyItemRemoved(position);
-			*/
-			return false;
-		}
-
-		@Override
-		public void onCheckedChanged(CompoundButton compoundButton, boolean b)
-		{
-			int position = getAdapterPosition();
-			if (!b && eintraege_liste.get(position).isChecked()) {
-				eintraege_liste.get(position).setName(eintraege_liste.get(position).getName() + " (erledigt)");
-				eintraege_liste.get(position).setChecked(false);
-			}
-			if (b && !eintraege_liste.get(getAdapterPosition()).isChecked()) {
-				eintraege_liste.get(position).setName(eintraege_liste.get(position).getName().replaceAll(" \\(erledigt\\)", "").toString());
-				eintraege_liste.get(position).setChecked(true);
-			}
-			if (!on_bind) notifyItemChanged(position);
+		public void setItem(Item item) {
+			this.item = item;
+			tv.setText(item.getName());
+			switchv.setChecked(item.isChecked());
 		}
 	}
 }

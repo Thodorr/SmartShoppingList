@@ -3,26 +3,29 @@ package ui;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.example.smartshoppinglist.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import core.Item;
+import core.AppDatabase;
+import core.ItemDao;
+import core.ListSorter;
 import math.Vector2;
-import ui.ItemListAdapter;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -31,12 +34,13 @@ public class MainActivity extends AppCompatActivity
 	private Button btnScan;
 	private RecyclerView listHolder;
 
-	private ArrayList<Item> itemList;
 	private ItemListAdapter itemAdapter;
 
 	private ActivityResultLauncher launchScanActivity;
 
 	private int counter = 0;
+
+	private List<Item> itemList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -48,14 +52,20 @@ public class MainActivity extends AppCompatActivity
 		btnAdd = findViewById(R.id.btnAdd);
 		btnScan = findViewById(R.id.btnScan);
 
-		itemList = new ArrayList<Item>();
-
-		if (itemList.isEmpty()) {
-			itemList.add(new Item("Test", new Vector2(0,0)));
-		}
-
 		listHolder = findViewById(R.id.itemListView);
-		itemAdapter = new ItemListAdapter(itemList);
+
+		AppDatabase db = AppDatabase.getDb(this);
+				LiveData<List<Item>> data = db.itemDao().getAll();
+		data.observe(this, items -> {
+			items = ListSorter.sortGenetic(items, 500, 100);
+			if (items.isEmpty()) {
+				items.add(new Item("Test", new Vector2(0,0)));
+			}
+			itemAdapter.submitList(items);
+			itemList = items;
+		});
+
+		itemAdapter = new ItemListAdapter();
 		listHolder.setAdapter(itemAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
 
@@ -99,41 +109,27 @@ public class MainActivity extends AppCompatActivity
 			return;
 		}
 
-		btnAdd.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view)
-			{
-				Item item = new Item("#" + counter + " HalloWelt");
-				System.out.println("Pos: " + item.getPosition().toString());
-				counter++;
-				addItemToList(item);
-			}
+		btnAdd.setOnClickListener(view -> {
+			Item item = new Item("#" + counter + " HalloWelt");
+			System.out.println("Pos: " + item.getPosition().toString());
+			counter++;
+			addItemToList(item);
 		});
 
-		btnScan.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view)
-			{
-				Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
-				launchScanActivity.launch(intent);
-			}
+		btnScan.setOnClickListener(view -> {
+			Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
+			launchScanActivity.launch(intent);
 		});
 
-		btnRefresh.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view)
-			{
-				itemAdapter.refreshList();
-			}
+		btnRefresh.setOnClickListener(view -> {
+			itemList = ListSorter.sortGenetic(itemList, 500, 100);
+			itemAdapter.submitList(itemList);
 		});
 	}
 
 	private void addItemToList(Item item)
 	{
-		itemAdapter.getEintraege_liste().add(item);
-		itemAdapter.notifyDataSetChanged();
+		ItemDao dao = AppDatabase.getDb(this).itemDao();
+		AsyncTask.execute(() -> dao.insertItem(item));
 	}
 }

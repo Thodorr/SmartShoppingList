@@ -3,36 +3,64 @@ package core;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import java.util.Objects;
+
 import math.Vector2;
 
+@Entity
 public class Item implements Parcelable
 {
+	@PrimaryKey(autoGenerate = true)
+	private int id;
 	private String name;
-	private Vector2 pos;
 
 	private boolean checked;
 
+	private Vector2 position;
+
+	@Ignore
 	public Item(String name, float posX, float posY)
 	{
 		this.name = name;
-		pos = new Vector2(posX, posY);
+		position = new Vector2(posX, posY);
 	}
 
+	@Ignore
 	public Item(String name, Vector2 position)
 	{
 		this.name = name;
-		this.pos = position;
+		this.position = position;
 	}
 
+	@Ignore
 	public Item(String name)
 	{
 		this.name = name;
-		this.pos = Vector2.random(0f, 100f);
+		this.position = Vector2.random(0f, 100f);
+	}
+
+	public Item(int id, String name, Vector2 position) {
+		this.id = id;
+		this.name = name;
+		this.position = position;
 	}
 
 	protected Item(Parcel in)
 	{
 		this(in.readString(), in.readFloat(), in.readFloat());
+	}
+
+	String getText() {
+		if (isChecked()) {
+			return getName() + " (erledigt)";
+		} else {
+			return getName();
+		}
 	}
 
 	public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -51,7 +79,7 @@ public class Item implements Parcelable
 
 	public Vector2 getPosition()
 	{
-		return pos;
+		return position;
 	}
 
 	public String getName()
@@ -74,12 +102,16 @@ public class Item implements Parcelable
 		this.checked = checked;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	@Override
 	public String toString()
 	{
 		return "Item{" +
 				"name='" + name + '\'' +
-				", pos=" + pos +
+				", pos=" + position +
 				", checked=" + checked +
 				'}';
 	}
@@ -94,7 +126,32 @@ public class Item implements Parcelable
 	public void writeToParcel(Parcel parcel, int i)
 	{
 		parcel.writeString(name);
-		parcel.writeFloat(pos.x);
-		parcel.writeFloat(pos.y);
+		parcel.writeFloat(position.x);
+		parcel.writeFloat(position.y);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Item item = (Item) o;
+		return id == item.id && checked == item.checked && name.equals(item.name) && position.equals(item.position);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, checked, position);
+	}
+
+	public static class DiffUtil extends androidx.recyclerview.widget.DiffUtil.ItemCallback<Item> {
+		@Override
+		public boolean areItemsTheSame(@NonNull Item oldItem, @NonNull Item newItem) {
+			return areContentsTheSame(oldItem, newItem);
+		}
+
+		@Override
+		public boolean areContentsTheSame(@NonNull Item oldItem, @NonNull Item newItem) {
+			return oldItem.equals(newItem);
+		}
 	}
 }

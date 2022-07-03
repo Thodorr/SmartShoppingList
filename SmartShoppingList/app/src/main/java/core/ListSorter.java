@@ -9,7 +9,7 @@ import core.Item;
 
 public abstract class ListSorter
 {
-	public static ArrayList<Item> sortGenetic(ArrayList<Item> items, int populationSize, int maxGenerations)
+	public static ArrayList<Item> sortGenetic(List<Item> items, int populationSize, int maxGenerations)
 	{
 		System.out.println("Sorting started");
 
