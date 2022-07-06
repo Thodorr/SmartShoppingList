@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +14,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.smartshoppinglist.R;
 
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		setTitle("Shopping List");
 
 		btnRefresh = findViewById(R.id.btnRefresh);
 		btnAdd = findViewById(R.id.btnAdd);
@@ -98,6 +105,35 @@ public class MainActivity extends AppCompatActivity
 		);
 
 		initBtns();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_refresh, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
+	{
+		switch(item.getItemId())
+		{
+			case R.id.menuItemAlpha:
+				itemList = ListSorter.sortAlphabeticallyAscending(itemList);
+				itemAdapter.submitList(itemList);
+				//Toast.makeText(this, "Sorted A - Z", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.menuItemDist:
+			case R.id.menuItemRefresh:
+			default:
+				itemList = ListSorter.sortGenetic(itemList, 500, 100);
+				itemAdapter.submitList(itemList);
+				//Toast.makeText(this, "Sorted by distance", Toast.LENGTH_SHORT).show();
+		}
+
+		return true;
 	}
 
 	private void initBtns()

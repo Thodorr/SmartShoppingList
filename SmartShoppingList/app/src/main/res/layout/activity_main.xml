@@ -25,6 +25,12 @@
         android:layout_height="wrap_content"
         android:text="Scan Item" />
 
+    <Button
+        android:id="@+id/btnProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Products" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itemListView"
         android:layout_width="match_parent"

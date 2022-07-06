@@ -20,81 +20,100 @@ import core.ItemDao;
 import core.ListSorter;
 import math.Vector2;
 
-public class EntryActivity extends AppCompatActivity {
+public class EntryActivity extends AppCompatActivity
+{
 
-    Button doButton;
-    Button cancelButton;
-    EditText nameField;
-    EditText unitField;
-    EditText eanField;
+	Button doButton;
+	Button cancelButton;
+	EditText nameField;
+	EditText unitField;
+	EditText eanField;
 
-    Item item;
+	Item item;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry);
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_entry);
 
-        doButton = findViewById(R.id.doButton);
-        cancelButton = findViewById(R.id.cancel);
-        nameField = findViewById(R.id.editItemName);
-        unitField = findViewById(R.id.editItemUnit);
-        eanField = findViewById(R.id.editItemEAN);
+		setTitle("Add Item");
 
-        Intent intent = getIntent();
+		doButton = findViewById(R.id.doButton);
+		cancelButton = findViewById(R.id.cancel);
+		nameField = findViewById(R.id.editItemName);
+		unitField = findViewById(R.id.editItemUnit);
+		eanField = findViewById(R.id.editItemEAN);
 
-        if (intent.hasExtra("itemID")) {
-            int id = intent.getIntExtra("itemID", -1);
-            if (id == -1) return;
-            adjustUI();
-            fillFields(id);
-            doButton.setOnClickListener(v -> EntryActivity.this.updateItem());
-        } else {
-            doButton.setOnClickListener(v -> EntryActivity.this.createItem());
-        }
-        cancelButton.setOnClickListener(v1 -> onBackPressed());
-    }
+		Intent intent = getIntent();
 
-    private void createItem() {
-        String name = nameField.getText().toString();
-        String unit = unitField.getText().toString();
-        String ean = eanField.getText().toString();
+		if (intent.hasExtra("itemID"))
+		{
+			int id = intent.getIntExtra("itemID", -1);
+            if (id == -1)
+            {
+                return;
+            }
+			adjustUI();
+			fillFields(id);
+			doButton.setOnClickListener(v -> EntryActivity.this.updateItem());
+		}
+		else
+		{
+			doButton.setOnClickListener(v -> EntryActivity.this.createItem());
+		}
+		cancelButton.setOnClickListener(v1 -> onBackPressed());
+	}
 
-        Item item = new Item(name, ean, unit);
+	private void createItem()
+	{
+		String name = nameField.getText().toString();
+		String unit = unitField.getText().toString();
+		String ean = eanField.getText().toString();
 
-        ItemDao dao = AppDatabase.getDb(this).itemDao();
-        AsyncTask.execute(() -> dao.insertItem(item));
-        finish();
-    }
+		Item item = new Item(name, ean, unit);
 
-    private void updateItem() {
-        String name = nameField.getText().toString();
-        String unit = unitField.getText().toString();
-        String ean = eanField.getText().toString();
+		ItemDao dao = AppDatabase.getDb(this).itemDao();
+		AsyncTask.execute(() -> dao.insertItem(item));
+		finish();
+	}
 
-        item.setName(name);
-        item.setUnit(unit);
-        item.setEan(ean);
+	private void updateItem()
+	{
+		String name = nameField.getText().toString();
+		String unit = unitField.getText().toString();
+		String ean = eanField.getText().toString();
 
-        ItemDao dao = AppDatabase.getDb(this).itemDao();
-        AsyncTask.execute(() -> dao.updateItem(item));
-        finish();
-    }
+		item.setName(name);
+		item.setUnit(unit);
+		item.setEan(ean);
 
-    private void fillFields(int id) {
+		ItemDao dao = AppDatabase.getDb(this).itemDao();
+		AsyncTask.execute(() -> dao.updateItem(item));
+		finish();
+	}
 
-        ItemDao dao = AppDatabase.getDb(this).itemDao();
+	private void fillFields(int id)
+	{
 
-        AsyncTask.execute(() -> {
-            item = dao.getItem(id);
+		ItemDao dao = AppDatabase.getDb(this).itemDao();
 
-            nameField.setText(item.getName());
-            unitField.setText(item.getUnit());
-            eanField.setText(item.getEan());
-        });
-    }
+		AsyncTask.execute(() -> {
+			item = dao.getItem(id);
 
-    private void adjustUI() {
-        doButton.setText("Update");
-    }
+			if (item == null)
+			{
+				return;
+			}
+
+			nameField.setText(item.getName());
+			unitField.setText(item.getUnit());
+			eanField.setText(item.getEan());
+		});
+	}
+
+	private void adjustUI()
+	{
+		doButton.setText("Update");
+	}
 }

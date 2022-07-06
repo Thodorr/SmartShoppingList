@@ -54,6 +54,8 @@ public class ScannerActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scanner);
 
+		setTitle("Scan Item");
+
 		editName = findViewById(R.id.editName);
 		editPosX = findViewById(R.id.editPosX);
 		editPosY = findViewById(R.id.editPosY);

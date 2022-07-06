@@ -52,4 +52,10 @@ public abstract class ListSorter
 		System.out.println("Sorting finished");
 		return sorted;
 	}
+
+	public static ArrayList<Item> sortAlphabeticallyAscending(List<Item> items)
+	{
+		// TODO: implement sorting alphabetically ascending
+		return  new ArrayList<>(items);
+	}
 }

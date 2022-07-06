@@ -22,7 +22,6 @@ public class Item implements Parcelable
 	private String unit;
 	private String ean;
 
-
 	private boolean checked;
 
 	public void setPosition(Vector2 position) {
