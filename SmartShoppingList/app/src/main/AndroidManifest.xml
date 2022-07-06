@@ -3,6 +3,7 @@
     package="com.example.smartshoppinglist">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartShoppingList">
+        <activity
+            android:name="ui.EntryActivity"
+            android:exported="false" />
         <activity
             android:name="ui.ScannerActivity"
             android:exported="false" />

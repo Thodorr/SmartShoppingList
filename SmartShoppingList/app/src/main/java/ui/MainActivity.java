@@ -13,12 +13,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.example.smartshoppinglist.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import core.Item;
@@ -110,10 +108,8 @@ public class MainActivity extends AppCompatActivity
 		}
 
 		btnAdd.setOnClickListener(view -> {
-			Item item = new Item("#" + counter + " HalloWelt");
-			System.out.println("Pos: " + item.getPosition().toString());
-			counter++;
-			addItemToList(item);
+			Intent open = new Intent(this, EntryActivity.class);
+			startActivity(open);
 		});
 
 		btnScan.setOnClickListener(view -> {

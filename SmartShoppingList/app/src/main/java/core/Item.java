@@ -18,10 +18,19 @@ public class Item implements Parcelable
 	@PrimaryKey(autoGenerate = true)
 	private int id;
 	private String name;
+	private int amount;
+	private String unit;
+	private String ean;
+
 
 	private boolean checked;
 
+	public void setPosition(Vector2 position) {
+		this.position = position;
+	}
+
 	private Vector2 position;
+
 
 	@Ignore
 	public Item(String name, float posX, float posY)
@@ -44,10 +53,12 @@ public class Item implements Parcelable
 		this.position = Vector2.random(0f, 100f);
 	}
 
-	public Item(int id, String name, Vector2 position) {
-		this.id = id;
+	public Item(String name, String ean, String unit) {
 		this.name = name;
-		this.position = position;
+		this.position = Vector2.random(0f, 100f);
+		this.ean = ean;
+		this.amount = 0;
+		this.unit = unit;
 	}
 
 	protected Item(Parcel in)
@@ -106,6 +117,30 @@ public class Item implements Parcelable
 		return id;
 	}
 
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getEan() {
+		return ean;
+	}
+
+	public void setEan(String ean) {
+		this.ean = ean;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -113,6 +148,9 @@ public class Item implements Parcelable
 				"name='" + name + '\'' +
 				", pos=" + position +
 				", checked=" + checked +
+				", amount=" + amount +
+				", unit=" + unit +
+				", ean=" + ean +
 				'}';
 	}
 
@@ -135,12 +173,17 @@ public class Item implements Parcelable
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Item item = (Item) o;
-		return id == item.id && checked == item.checked && name.equals(item.name) && position.equals(item.position);
+		return id == item.id && checked == item.checked && name.equals(item.name) && position.equals(item.position)
+				&& ean.equals(item.ean);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, checked, position);
+		return Objects.hash(id, name, checked, position, ean);
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public static class DiffUtil extends androidx.recyclerview.widget.DiffUtil.ItemCallback<Item> {

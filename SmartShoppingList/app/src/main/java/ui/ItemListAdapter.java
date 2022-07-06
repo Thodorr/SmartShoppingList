@@ -1,5 +1,8 @@
 package ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import core.AppDatabase;
+import core.ItemDao;
 import core.ListSorter;
 import com.example.smartshoppinglist.R;
 
@@ -25,6 +30,8 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHol
 	protected ItemListAdapter() {
 		super(new Item.DiffUtil());
 	}
+
+	private Context context;
 
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,6 +46,7 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHol
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		Item item = getItem(position);
+		context = holder.itemView.getContext();
 		holder.setItem(item);
 	}
 
@@ -52,9 +60,13 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHol
 		{
 			super(v);
 			v.setOnClickListener(v1 -> {
-
+				Intent open = new Intent(context, EntryActivity.class);
+				open.putExtra("itemID", item.getId());
+				context.startActivity(open);
 			});
 			v.setOnLongClickListener(v12 -> {
+				ItemDao dao = AppDatabase.getDb(context).itemDao();
+				AsyncTask.execute(() -> dao.deleteItem(item));
 				return false;
 			});
 			cl = v;
