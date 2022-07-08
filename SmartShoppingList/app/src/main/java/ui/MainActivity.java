@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
 	private Button btnRefresh;
 	private Button btnAdd;
 	private Button btnScan;
+	private  Button btnProducts;
 	private RecyclerView listHolder;
 
 	private ItemListAdapter itemAdapter;
@@ -56,9 +57,11 @@ public class MainActivity extends AppCompatActivity
 		btnRefresh = findViewById(R.id.btnRefresh);
 		btnAdd = findViewById(R.id.btnAdd);
 		btnScan = findViewById(R.id.btnScan);
+		btnProducts = findViewById(R.id.btnProducts);
 
 		listHolder = findViewById(R.id.itemListView);
 
+		/*
 		AppDatabase db = AppDatabase.getDb(this);
 				LiveData<List<Item>> data = db.itemDao().getAll();
 		data.observe(this, items -> {
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity
 			itemAdapter.submitList(items);
 			itemList = items;
 		});
+		 */
 
 		itemAdapter = new ItemListAdapter();
 		listHolder.setAdapter(itemAdapter);
@@ -156,6 +160,11 @@ public class MainActivity extends AppCompatActivity
 		btnRefresh.setOnClickListener(view -> {
 			itemList = ListSorter.sortGenetic(itemList, 500, 100);
 			itemAdapter.submitList(itemList);
+		});
+
+		btnProducts.setOnClickListener(view -> {
+			Intent open = new Intent(this, ProductActivity.class);
+			startActivity(open);
 		});
 	}
 

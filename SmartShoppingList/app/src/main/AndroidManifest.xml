@@ -15,6 +15,9 @@
             android:name="ui.EntryActivity"
             android:exported="false" />
         <activity
+            android:name="ui.ProductActivity"
+            android:exported="false" />
+        <activity
             android:name="ui.ScannerActivity"
             android:exported="false" />
         <activity

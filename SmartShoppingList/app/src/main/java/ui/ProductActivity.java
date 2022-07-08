@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import androidx.activity.result.ActivityResult;
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshoppinglist.R;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import core.AppDatabase;
@@ -31,30 +34,28 @@ import math.Vector2;
 
 public class ProductActivity extends AppCompatActivity
 {
-	private Button btnRefresh;
-	private Button btnAdd;
-	private Button btnScan;
-	private RecyclerView listHolder;
+	static public String RETURN_VALUE = "products";
 
-	private ItemListAdapter itemAdapter;
+	private RecyclerView listHolder;
 
 	private ActivityResultLauncher launchScanActivity;
 
 	private int counter = 0;
 
 	private List<Item> itemList;
+	private ItemListAdapter itemAdapter;
+
+	private List<Item> selectedProducts;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_products);
 
-		setTitle("Shopping List");
+		setTitle("Product List");
 
-		btnRefresh = findViewById(R.id.btnRefresh);
-		btnAdd = findViewById(R.id.btnAdd);
-		btnScan = findViewById(R.id.btnScan);
+		selectedProducts = new ArrayList<Item>();
 
 		listHolder = findViewById(R.id.itemListView);
 
@@ -72,38 +73,6 @@ public class ProductActivity extends AppCompatActivity
 		itemAdapter = new ItemListAdapter();
 		listHolder.setAdapter(itemAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
-
-		launchScanActivity = registerForActivityResult(
-				new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>()
-				{
-					@Override
-					public void onActivityResult(ActivityResult result)
-					{
-						if(result.getResultCode() == Activity.RESULT_OK)
-						{
-							Intent data = result.getData();
-							if(data == null || !data.hasExtra(ScannerActivity.RETURN_VALUE))
-							{
-								return;
-							}
-
-							// TODO: handle scanner result data
-							Bundle bundle = data.getExtras();
-							Item item = (Item) bundle.getParcelable(ScannerActivity.RETURN_VALUE);
-
-							if(item == null)
-							{
-								System.out.println("Scanner returned null");
-								return;
-							}
-							System.out.println(item.toString());
-							addItemToList(item);
-						}
-					}
-				}
-		);
-
-		initBtns();
 	}
 
 	@Override
@@ -135,32 +104,12 @@ public class ProductActivity extends AppCompatActivity
 		return true;
 	}
 
-	private void initBtns()
+	@Override
+	public void onBackPressed()
 	{
-		if(btnAdd == null || btnRefresh == null)
-		{
-			return;
-		}
-
-		btnAdd.setOnClickListener(view -> {
-			Intent open = new Intent(this, EntryActivity.class);
-			startActivity(open);
-		});
-
-		btnScan.setOnClickListener(view -> {
-			Intent intent = new Intent(ProductActivity.this, ScannerActivity.class);
-			launchScanActivity.launch(intent);
-		});
-
-		btnRefresh.setOnClickListener(view -> {
-			itemList = ListSorter.sortGenetic(itemList, 500, 100);
-			itemAdapter.submitList(itemList);
-		});
-	}
-
-	private void addItemToList(Item item)
-	{
-		ItemDao dao = AppDatabase.getDb(this).itemDao();
-		AsyncTask.execute(() -> dao.insertItem(item));
+		Intent in = new Intent();
+		in.putExtra(RETURN_VALUE,  (Serializable) selectedProducts);
+		setResult(Activity.RESULT_OK, in);
+		super.onBackPressed();
 	}
 }
