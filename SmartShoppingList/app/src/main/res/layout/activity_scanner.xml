@@ -36,25 +36,10 @@
         android:text="Scan" />
 
     <TextView
-        android:id="@+id/lblPosX"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Pos X:"
-        android:textAlignment="textStart" />
-
-    <EditText
-        android:id="@+id/editPosX"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0.0" />
-
-    <TextView
         android:id="@+id/lblPosY"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pos Y:"
+        android:text="Shelf Nr:"
         android:textAlignment="textStart" />
 
     <EditText
@@ -62,8 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0.0" />
+        android:inputType="number" />
 
     <Button
         android:id="@+id/btnBack"

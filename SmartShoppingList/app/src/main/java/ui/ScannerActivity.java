@@ -27,6 +27,8 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import core.Item;
+import core.Supermarket;
+import math.Vector2;
 
 public class ScannerActivity extends AppCompatActivity
 {
@@ -34,7 +36,6 @@ public class ScannerActivity extends AppCompatActivity
 
 	private Button btnBack;
 	private EditText editName;
-	private EditText editPosX;
 	private EditText editPosY;
 
 	private SurfaceView surfaceView;
@@ -57,7 +58,6 @@ public class ScannerActivity extends AppCompatActivity
 		setTitle("Scan Item");
 
 		editName = findViewById(R.id.editName);
-		editPosX = findViewById(R.id.editPosX);
 		editPosY = findViewById(R.id.editPosY);
 
 		btnBack = findViewById(R.id.btnBack);
@@ -165,21 +165,18 @@ public class ScannerActivity extends AppCompatActivity
 							// TODO: make database entry
 							String name = editName.getText().toString();
 							name = name.isEmpty() ? "Scan" : name;
-							float posX = 0f;
-							float posY = 0f;
-
+							Vector2 pos;
 							try
 							{
-								posX = Float.parseFloat(editPosX.getText().toString());
-								posY = Float.parseFloat(editPosY.getText().toString());
+								int shelfNr = Integer.parseInt(editPosY.getText().toString());
+								pos = new Supermarket().getPosition(shelfNr);
 							}
 							catch(NumberFormatException e)
 							{
-								posX = 0f;
-								posY = 0f;
+								pos = Vector2.zero;
 							}
 
-							scannedItem = new Item(name, posX, posY);
+							scannedItem = new Item(name, pos);
 							System.out.println(scannedItem.toString());
 						}
 					});
