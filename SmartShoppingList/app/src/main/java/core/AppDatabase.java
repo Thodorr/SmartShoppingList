@@ -12,7 +12,6 @@ import androidx.room.TypeConverters;
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ItemDao itemDao();
 
-
     private static AppDatabase db;
     private static final Object dbLock = new Object();
 

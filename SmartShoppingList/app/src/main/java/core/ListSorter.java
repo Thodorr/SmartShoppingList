@@ -9,8 +9,10 @@ import core.Item;
 
 public abstract class ListSorter
 {
-	public static ArrayList<Item> sortGenetic(List<Item> items, int populationSize, int maxGenerations)
+	public static List<Item> sortGenetic(List<Item> items, int populationSize, int maxGenerations)
 	{
+		if (items == null) return null;
+		if (items.isEmpty()) return items;
 		System.out.println("Sorting started");
 
 		Item[] is = new Item[items.size()];

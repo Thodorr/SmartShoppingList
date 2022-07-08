@@ -21,6 +21,7 @@ public class Item implements Parcelable
 	private int amount;
 	private String unit;
 	private String ean;
+	private String iconName;
 
 	private boolean checked;
 
@@ -52,12 +53,13 @@ public class Item implements Parcelable
 		this.position = Vector2.random(0f, 100f);
 	}
 
-	public Item(String name, String ean, String unit) {
+	public Item(String name, String ean, String unit, String iconName) {
 		this.name = name;
 		this.position = Vector2.random(0f, 100f);
 		this.ean = ean;
 		this.amount = 0;
 		this.unit = unit;
+		this.iconName = iconName;
 	}
 
 	protected Item(Parcel in)
@@ -140,6 +142,14 @@ public class Item implements Parcelable
 		this.ean = ean;
 	}
 
+	public String getIconName() {
+		return iconName;
+	}
+
+	public void setIconName(String iconName) {
+		this.iconName = iconName;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -173,12 +183,12 @@ public class Item implements Parcelable
 		if (o == null || getClass() != o.getClass()) return false;
 		Item item = (Item) o;
 		return id == item.id && checked == item.checked && name.equals(item.name) && position.equals(item.position)
-				&& ean.equals(item.ean);
+				&& ean.equals(item.ean) && item.iconName == iconName;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, checked, position, ean);
+		return Objects.hash(id, name, checked, position, ean, iconName);
 	}
 
 	public void setId(int id) {

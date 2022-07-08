@@ -1,6 +1,8 @@
 package ui;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -21,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshoppinglist.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,10 +42,13 @@ public class ProductActivity extends AppCompatActivity
 	static public String RETURN_VALUE = "products";
 
 	private RecyclerView listHolder;
+	private FloatingActionButton addProduct;
 
 	private ActivityResultLauncher launchScanActivity;
 
 	private int counter = 0;
+
+	private Context context;
 
 	private List<Item> itemList;
 	private ItemListAdapter itemAdapter;
@@ -55,12 +63,15 @@ public class ProductActivity extends AppCompatActivity
 
 		setTitle("Product List");
 
+		context = this;
+
 		selectedProducts = new ArrayList<Item>();
 
 		listHolder = findViewById(R.id.itemListView);
+		addProduct = findViewById(R.id.addProductButton);
 
 		AppDatabase db = AppDatabase.getDb(this);
-				LiveData<List<Item>> data = db.itemDao().getAll();
+		LiveData<List<Item>> data = db.itemDao().getAll();
 		data.observe(this, items -> {
 			items = ListSorter.sortGenetic(items, 500, 100);
 			if (items.isEmpty()) {
@@ -73,13 +84,37 @@ public class ProductActivity extends AppCompatActivity
 		itemAdapter = new ItemListAdapter();
 		listHolder.setAdapter(itemAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
+
+		addProduct.setOnClickListener(v -> {
+			Intent open = new Intent(this, EntryActivity.class);
+			startActivity(open);
+		});
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_refresh, menu);
+		inflater.inflate(R.menu.menu_search, menu);
+
+		SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				AppDatabase db = AppDatabase.getDb(context);
+				AsyncTask.execute(() -> {
+					List<Item> searchResults = db.itemDao().getBySearch(newText);
+					itemAdapter.submitList(searchResults);
+				});
+				return false;
+			}
+		});
+
 		return true;
 	}
 

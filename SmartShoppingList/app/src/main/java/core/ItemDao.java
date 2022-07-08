@@ -17,6 +17,9 @@ public interface ItemDao {
     @Query("SELECT * FROM item WHERE id = :id")
     Item getItem(int id);
 
+    @Query("SELECT * FROM item WHERE name LIKE '%' || :search || '%'")
+    List<Item> getBySearch(String search);
+
     @Insert
     void insertItem(Item item);
 

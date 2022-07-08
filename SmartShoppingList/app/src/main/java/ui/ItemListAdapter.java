@@ -4,24 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import core.AppDatabase;
 import core.ItemDao;
-import core.ListSorter;
 import com.example.smartshoppinglist.R;
-
-import java.util.ArrayList;
 
 import core.Item;
 
@@ -54,6 +48,7 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHol
 		public LinearLayout cl;
 		private Switch switchv;
 		private TextView tv;
+		private ImageView icon;
 		private Item item;
 
 		public MyViewHolder(LinearLayout v)
@@ -71,6 +66,7 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHol
 			});
 			cl = v;
 			switchv = cl.findViewById(R.id.switchView);
+			icon = cl.findViewById(R.id.imageView2);
 			switchv.setOnCheckedChangeListener((buttonView, isChecked) -> {
 				item.setChecked(isChecked);
 			});
@@ -81,6 +77,35 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHol
 			this.item = item;
 			tv.setText(item.getName());
 			switchv.setChecked(item.isChecked());
+
+			switch(item.getIconName()) {
+				case "Croissant":
+					icon.setImageResource(R.drawable.baseline_bakery_dining_24);
+					break;
+				case "Bread":
+					icon.setImageResource(R.drawable.baseline_breakfast_dining_24);
+					break;
+				case "Burger":
+					icon.setImageResource(R.drawable.baseline_lunch_dining_24);
+					break;
+				case "Egg":
+					icon.setImageResource(R.drawable.baseline_egg_24);
+					break;
+				case "Meat":
+					icon.setImageResource(R.drawable.baseline_kebab_dining_24);
+					break;
+				case "Coffee":
+					icon.setImageResource(R.drawable.baseline_local_cafe_24);
+					break;
+				case "Pizza":
+					icon.setImageResource(R.drawable.baseline_local_pizza_24);
+					break;
+				case "Ice Cream":
+					icon.setImageResource(R.drawable.baseline_icecream_24);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 }

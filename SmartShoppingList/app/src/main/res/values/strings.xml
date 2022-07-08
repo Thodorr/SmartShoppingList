@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">SmartShoppingList</string>
+
+    <string-array name="iconNames">
+        <item>Burger</item>
+        <item>Meat</item>
+        <item>Coffee</item>
+        <item>Pizza</item>
+        <item>Egg</item>
+        <item>Bread</item>
+        <item>Croissant</item>
+    </string-array>
 </resources>

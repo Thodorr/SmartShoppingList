@@ -1,24 +1,19 @@
 package ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.smartshoppinglist.R;
-
-import java.util.List;
 
 import core.AppDatabase;
 import core.Item;
 import core.ItemDao;
-import core.ListSorter;
-import math.Vector2;
 
 public class EntryActivity extends AppCompatActivity
 {
@@ -28,6 +23,7 @@ public class EntryActivity extends AppCompatActivity
 	EditText nameField;
 	EditText unitField;
 	EditText eanField;
+	Spinner iconSpinner;
 
 	Item item;
 
@@ -44,6 +40,7 @@ public class EntryActivity extends AppCompatActivity
 		nameField = findViewById(R.id.editItemName);
 		unitField = findViewById(R.id.editItemUnit);
 		eanField = findViewById(R.id.editItemEAN);
+		iconSpinner = findViewById(R.id.iconSpinner);
 
 		Intent intent = getIntent();
 
@@ -70,8 +67,9 @@ public class EntryActivity extends AppCompatActivity
 		String name = nameField.getText().toString();
 		String unit = unitField.getText().toString();
 		String ean = eanField.getText().toString();
+		String iconName = iconSpinner.getSelectedItem().toString();
 
-		Item item = new Item(name, ean, unit);
+		Item item = new Item(name, ean, unit, iconName);
 
 		ItemDao dao = AppDatabase.getDb(this).itemDao();
 		AsyncTask.execute(() -> dao.insertItem(item));
