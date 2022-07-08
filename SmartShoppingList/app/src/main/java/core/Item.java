@@ -53,7 +53,7 @@ public class Item implements Parcelable
 		this.position = Vector2.random(0f, 100f);
 	}
 
-	public Item(String name, String ean, String unit, String iconName) {
+	public Item(String name, String ean, String unit, String iconName, Vector2 position) {
 		this.name = name;
 		this.position = Vector2.random(0f, 100f);
 		this.ean = ean;

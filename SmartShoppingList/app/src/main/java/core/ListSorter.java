@@ -55,9 +55,10 @@ public abstract class ListSorter
 		return sorted;
 	}
 
-	public static ArrayList<Item> sortAlphabeticallyAscending(List<Item> items)
+	public static List<Item> sortAlphabeticallyAscending(List<Item> items)
 	{
 		// TODO: implement sorting alphabetically ascending
+		
 		return  new ArrayList<>(items);
 	}
 }

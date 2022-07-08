@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -23,9 +24,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
+import core.AppDatabase;
 import core.Item;
 import core.Supermarket;
 import math.Vector2;
@@ -49,6 +52,8 @@ public class ScannerActivity extends AppCompatActivity
 
 	private Item scannedItem;
 
+	private boolean scanned;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -56,6 +61,8 @@ public class ScannerActivity extends AppCompatActivity
 		setContentView(R.layout.activity_scanner);
 
 		setTitle("Scan Item");
+
+		scanned = false;
 
 		editName = findViewById(R.id.editName);
 		editPosY = findViewById(R.id.editPosY);
@@ -154,34 +161,54 @@ public class ScannerActivity extends AppCompatActivity
 				final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 				if (barcodes.size() != 0)
 				{
-					barcodeText.post(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							barcodeData = barcodes.valueAt(0).displayValue;
-							barcodeText.setText(barcodeData);
-							toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
-							// TODO: make database entry
-							String name = editName.getText().toString();
-							name = name.isEmpty() ? "Scan" : name;
-							Vector2 pos;
-							try
-							{
-								int shelfNr = Integer.parseInt(editPosY.getText().toString());
-								pos = new Supermarket().getPosition(shelfNr);
-							}
-							catch(NumberFormatException e)
-							{
-								pos = Vector2.zero;
-							}
+					barcodeText.post(() -> {
+						if (scanned) return;
 
-							scannedItem = new Item(name, pos);
-							System.out.println(scannedItem.toString());
+						barcodeData = barcodes.valueAt(0).displayValue;
+						checkForExistence(barcodeData, (eanExists) -> {
+							if (eanExists) {
+								Toast.makeText(getApplicationContext(), "Product already exists", Toast.LENGTH_SHORT).show();
+								Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+								startActivity(intent);
+							}
+						});
+
+						barcodeText.setText(barcodeData);
+						toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
+						// TODO: make database entry
+						String name = editName.getText().toString();
+						name = name.isEmpty() ? "Scan" : name;
+						Vector2 pos;
+						try
+						{
+							int shelfNr = Integer.parseInt(editPosY.getText().toString());
+							pos = new Supermarket().getPosition(shelfNr);
 						}
+						catch(NumberFormatException e)
+						{
+							pos = Vector2.zero;
+						}
+
+						scanned = true;
+						Intent intent = new Intent(getApplicationContext(), EntryActivity.class);
+						intent.putExtra("ean", barcodeData);
+						startActivity(intent);
 					});
 				}
 			}
+		});
+	}
+
+	interface OnEanListener {
+		void eanChecked(boolean eanExists);
+	}
+
+	private void checkForExistence(String ean, OnEanListener callback) {
+		AppDatabase db = AppDatabase.getDb(getApplicationContext());
+		AsyncTask.execute(() -> {
+			Item existItem = db.itemDao().checkForEan(ean);
+			System.out.println(existItem);
+			runOnUiThread(() -> callback.eanChecked(existItem != null));
 		});
 	}
 }

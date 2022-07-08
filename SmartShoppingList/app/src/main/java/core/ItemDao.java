@@ -20,6 +20,9 @@ public interface ItemDao {
     @Query("SELECT * FROM item WHERE name LIKE '%' || :search || '%'")
     List<Item> getBySearch(String search);
 
+    @Query("SELECT * FROM item WHERE ean = :ean")
+    Item checkForEan(String ean);
+
     @Insert
     void insertItem(Item item);
 
