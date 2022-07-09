@@ -24,10 +24,13 @@ import com.example.smartshoppinglist.R;
 
 import java.util.List;
 
+import core.IProduct;
 import core.Item;
 import core.AppDatabase;
 import core.ItemDao;
 import core.ListSorter;
+import core.Product;
+import core.ProductDao;
 import math.Vector2;
 
 public class MainActivity extends AppCompatActivity
@@ -38,13 +41,13 @@ public class MainActivity extends AppCompatActivity
 	private  Button btnProducts;
 	private RecyclerView listHolder;
 
-	private ItemListAdapter itemAdapter;
+	private ProductListAdapter productAdapter;
 
 	private ActivityResultLauncher launchScanActivity;
 
 	private int counter = 0;
 
-	private List<Item> itemList;
+	private List<Product> productList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -61,21 +64,19 @@ public class MainActivity extends AppCompatActivity
 
 		listHolder = findViewById(R.id.itemListView);
 
-		/*
 		AppDatabase db = AppDatabase.getDb(this);
-				LiveData<List<Item>> data = db.itemDao().getAll();
-		data.observe(this, items -> {
-			items = ListSorter.sortGenetic(items, 500, 100);
-			if (items.isEmpty()) {
-				items.add(new Item("Test", new Vector2(0,0)));
+				LiveData<List<Product>> data = db.productDao().getAll();
+		data.observe(this, products -> {
+			products = (List<Product>) ListSorter.sortGenetic(products, 500, 100);
+			if (products.isEmpty()) {
+				// TODO: ist hier ein Default Objekt nötig?
 			}
-			itemAdapter.submitList(items);
-			itemList = items;
+			productAdapter.submitList(products);
+			productList = products;
 		});
-		 */
 
-		itemAdapter = new ItemListAdapter();
-		listHolder.setAdapter(itemAdapter);
+		productAdapter = new ProductListAdapter();
+		listHolder.setAdapter(productAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
 
 		launchScanActivity = registerForActivityResult(
@@ -94,15 +95,15 @@ public class MainActivity extends AppCompatActivity
 
 							// TODO: handle scanner result data
 							Bundle bundle = data.getExtras();
-							Item item = (Item) bundle.getParcelable(ScannerActivity.RETURN_VALUE);
+							Product product = (Product) bundle.getParcelable(ScannerActivity.RETURN_VALUE);
 
-							if(item == null)
+							if(product == null)
 							{
 								System.out.println("Scanner returned null");
 								return;
 							}
-							System.out.println(item.toString());
-							addItemToList(item);
+							System.out.println(product.toString());
+							addItemToList(product);
 						}
 					}
 				}
@@ -125,15 +126,15 @@ public class MainActivity extends AppCompatActivity
 		switch(item.getItemId())
 		{
 			case R.id.menuItemAlpha:
-				itemList = ListSorter.sortAlphabeticallyAscending(itemList);
-				itemAdapter.submitList(itemList);
+				productList = (List<Product>) ListSorter.sortAlphabeticallyAscending(productList);
+				productAdapter.submitList(productList);
 				//Toast.makeText(this, "Sorted A - Z", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.menuItemDist:
 			case R.id.menuItemRefresh:
 			default:
-				itemList = ListSorter.sortGenetic(itemList, 500, 100);
-				itemAdapter.submitList(itemList);
+				productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
+				productAdapter.submitList(productList);
 				//Toast.makeText(this, "Sorted by distance", Toast.LENGTH_SHORT).show();
 		}
 
@@ -158,8 +159,8 @@ public class MainActivity extends AppCompatActivity
 		});
 
 		btnRefresh.setOnClickListener(view -> {
-			itemList = ListSorter.sortGenetic(itemList, 500, 100);
-			itemAdapter.submitList(itemList);
+			productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
+			productAdapter.submitList(productList);
 		});
 
 		btnProducts.setOnClickListener(view -> {
@@ -168,9 +169,9 @@ public class MainActivity extends AppCompatActivity
 		});
 	}
 
-	private void addItemToList(Item item)
+	private void addItemToList(Product product)
 	{
-		ItemDao dao = AppDatabase.getDb(this).itemDao();
-		AsyncTask.execute(() -> dao.insertItem(item));
+		ProductDao dao = AppDatabase.getDb(this).productDao();
+		AsyncTask.execute(() -> dao.insertProduct(product));
 	}
 }

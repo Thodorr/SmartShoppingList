@@ -13,51 +13,42 @@ import java.util.Objects;
 import math.Vector2;
 
 @Entity
-public class Item implements Parcelable
+public class Item implements Parcelable, IProduct
 {
 	@PrimaryKey(autoGenerate = true)
-	private int id;
+	private int itemID;
 	private String name;
-	private int amount;
 	private String unit;
 	private String ean;
 	private String iconName;
-
-	private boolean checked;
+	private Vector2 position;
 
 	public void setPosition(Vector2 position) {
 		this.position = position;
 	}
 
-	private Vector2 position;
-
-
 	@Ignore
 	public Item(String name, float posX, float posY)
 	{
-		this.name = name;
-		position = new Vector2(posX, posY);
+		this(name, new Vector2(posX, posY));
 	}
 
 	@Ignore
 	public Item(String name, Vector2 position)
 	{
-		this.name = name;
-		this.position = position;
+		this(name, position, "", "", "");
 	}
 
 	@Ignore
 	public Item(String name)
 	{
-		this.name = name;
-		this.position = Vector2.random(0f, 100f);
+		this(name, Vector2.random(0f, 100f));
 	}
 
-	public Item(String name, String ean, String unit, String iconName) {
+	public Item(String name, Vector2 position, String ean, String unit, String iconName) {
 		this.name = name;
-		this.position = Vector2.random(0f, 100f);
+		this.position = position;
 		this.ean = ean;
-		this.amount = 0;
 		this.unit = unit;
 		this.iconName = iconName;
 	}
@@ -65,14 +56,6 @@ public class Item implements Parcelable
 	protected Item(Parcel in)
 	{
 		this(in.readString(), in.readFloat(), in.readFloat());
-	}
-
-	String getText() {
-		if (isChecked()) {
-			return getName() + " (erledigt)";
-		} else {
-			return getName();
-		}
 	}
 
 	public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -104,26 +87,15 @@ public class Item implements Parcelable
 		this.name = name;
 	}
 
-	public boolean isChecked()
+
+	public int getItemID()
 	{
-		return checked;
+		return itemID;
 	}
 
-	public void setChecked(boolean checked)
+	public void setItemID(int itemID)
 	{
-		this.checked = checked;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public int getAmount() {
-		return amount;
-	}
-
-	public void setAmount(int amount) {
-		this.amount = amount;
+		this.itemID = itemID;
 	}
 
 	public String getUnit() {
@@ -156,10 +128,9 @@ public class Item implements Parcelable
 		return "Item{" +
 				"name='" + name + '\'' +
 				", pos=" + position +
-				", checked=" + checked +
-				", amount=" + amount +
 				", unit=" + unit +
 				", ean=" + ean +
+				", iconName=" + iconName +
 				'}';
 	}
 
@@ -182,17 +153,23 @@ public class Item implements Parcelable
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Item item = (Item) o;
-		return id == item.id && checked == item.checked && name.equals(item.name) && position.equals(item.position)
+		return itemID == item.itemID && name.equals(item.name) && position.equals(item.position)
 				&& ean.equals(item.ean) && item.iconName == iconName;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, checked, position, ean, iconName);
+		return Objects.hash(itemID, name, position, ean, iconName);
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.itemID = id;
+	}
+
+	@Override
+	public Item getItem()
+	{
+		return this;
 	}
 
 	public static class DiffUtil extends androidx.recyclerview.widget.DiffUtil.ItemCallback<Item> {

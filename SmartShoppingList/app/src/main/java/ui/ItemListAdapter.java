@@ -19,7 +19,7 @@ import com.example.smartshoppinglist.R;
 
 import core.Item;
 
-public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHolder> {
+public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewHolder> {
 
 	protected ItemListAdapter() {
 		super(new Item.DiffUtil());
@@ -28,56 +28,53 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.MyViewHol
 	private Context context;
 
 	@Override
-	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		// create a new view
 		// TODO cast to ConstraintLayout not possible
 		LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
 				.inflate(R.layout.item_list_layout, parent, false);
-		MyViewHolder vh = new MyViewHolder(v);
+		ItemViewHolder vh = new ItemViewHolder(v);
 		return vh;
 	}
 
 	@Override
-	public void onBindViewHolder(MyViewHolder holder, int position) {
+	public void onBindViewHolder(ItemViewHolder holder, int position) {
 		Item item = getItem(position);
 		context = holder.itemView.getContext();
 		holder.setItem(item);
 	}
 
-	public class MyViewHolder extends RecyclerView.ViewHolder {
+	public class ItemViewHolder extends RecyclerView.ViewHolder {
 		public LinearLayout cl;
-		private Switch switchv;
 		private TextView tv;
 		private ImageView icon;
 		private Item item;
 
-		public MyViewHolder(LinearLayout v)
+		public ItemViewHolder(LinearLayout v)
 		{
 			super(v);
 			v.setOnClickListener(v1 -> {
 				Intent open = new Intent(context, EntryActivity.class);
-				open.putExtra("itemID", item.getId());
+				open.putExtra("itemID", item.getItemID());
 				context.startActivity(open);
 			});
+			/*
 			v.setOnLongClickListener(v12 -> {
 				ItemDao dao = AppDatabase.getDb(context).itemDao();
 				AsyncTask.execute(() -> dao.deleteItem(item));
 				return false;
 			});
+			*/
 			cl = v;
-			switchv = cl.findViewById(R.id.switchView);
 			icon = cl.findViewById(R.id.imageView2);
-			switchv.setOnCheckedChangeListener((buttonView, isChecked) -> {
-				item.setChecked(isChecked);
-			});
 			tv = cl.findViewById(R.id.textView);
 		}
 
 		public void setItem(Item item) {
 			this.item = item;
 			tv.setText(item.getName());
-			switchv.setChecked(item.isChecked());
 
+			System.out.println("Icon: " + item);
 			switch(item.getIconName()) {
 				case "Croissant":
 					icon.setImageResource(R.drawable.baseline_bakery_dining_24);

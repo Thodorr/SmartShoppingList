@@ -14,6 +14,7 @@ import com.example.smartshoppinglist.R;
 import core.AppDatabase;
 import core.Item;
 import core.ItemDao;
+import math.Vector2;
 
 public class EntryActivity extends AppCompatActivity
 {
@@ -69,7 +70,7 @@ public class EntryActivity extends AppCompatActivity
 		String ean = eanField.getText().toString();
 		String iconName = iconSpinner.getSelectedItem().toString();
 
-		Item item = new Item(name, ean, unit, iconName);
+		Item item = new Item(name, Vector2.random(0f, 10f), ean, unit, iconName);
 
 		ItemDao dao = AppDatabase.getDb(this).itemDao();
 		AsyncTask.execute(() -> dao.insertItem(item));

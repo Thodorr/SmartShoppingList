@@ -14,7 +14,7 @@ public interface ItemDao {
     @Query("SELECT * FROM item")
     LiveData<List<Item>> getAll();
 
-    @Query("SELECT * FROM item WHERE id = :id")
+    @Query("SELECT * FROM item WHERE itemID = :id")
     Item getItem(int id);
 
     @Query("SELECT * FROM item WHERE name LIKE '%' || :search || '%'")

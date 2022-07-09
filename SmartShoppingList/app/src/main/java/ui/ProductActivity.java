@@ -73,7 +73,7 @@ public class ProductActivity extends AppCompatActivity
 		AppDatabase db = AppDatabase.getDb(this);
 		LiveData<List<Item>> data = db.itemDao().getAll();
 		data.observe(this, items -> {
-			items = ListSorter.sortGenetic(items, 500, 100);
+			items = (List<Item>) ListSorter.sortGenetic(items, 500, 100);
 			if (items.isEmpty()) {
 				items.add(new Item("Test", new Vector2(0,0)));
 			}
@@ -124,14 +124,14 @@ public class ProductActivity extends AppCompatActivity
 		switch(item.getItemId())
 		{
 			case R.id.menuItemAlpha:
-				itemList = ListSorter.sortAlphabeticallyAscending(itemList);
+				itemList = (List<Item>) ListSorter.sortAlphabeticallyAscending(itemList);
 				itemAdapter.submitList(itemList);
 				//Toast.makeText(this, "Sorted A - Z", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.menuItemDist:
 			case R.id.menuItemRefresh:
 			default:
-				itemList = ListSorter.sortGenetic(itemList, 500, 100);
+				itemList = (List<Item>) ListSorter.sortGenetic(itemList, 500, 100);
 				itemAdapter.submitList(itemList);
 				//Toast.makeText(this, "Sorted by distance", Toast.LENGTH_SHORT).show();
 		}
