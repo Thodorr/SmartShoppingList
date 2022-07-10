@@ -1,24 +1,20 @@
 package ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartshoppinglist.R;
 
 import core.AppDatabase;
-import core.Item;
-import core.ItemDao;
 import core.Product;
 import core.ProductDao;
 
@@ -34,10 +30,9 @@ public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.
 	@Override
 	public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
-		LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
+		ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
 				.inflate(R.layout.item_list_layout, parent, false);
-		ProductViewHolder vh = new ProductViewHolder(v);
-		return vh;
+		return new ProductViewHolder(v);
 	}
 
 	@Override
@@ -49,20 +44,17 @@ public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.
 	}
 
 	public class ProductViewHolder extends RecyclerView.ViewHolder {
-		public LinearLayout cl;
-		private TextView tv;
-		private Switch sw;
-		private ImageView icon;
+		public ConstraintLayout cl;
+		private final TextView tv;
+		private final ImageView icon;
+		private final TextView amountView;
+		private final TextView unitView;
 		private Product product;
 
-		public ProductViewHolder(LinearLayout v)
+
+		public ProductViewHolder(ConstraintLayout v)
 		{
 			super(v);
-			v.setOnClickListener(v1 -> {
-				Intent open = new Intent(context, EntryActivity.class); // TODO: Extra should be Product instead of Item
-				open.putExtra("productID", product.getProductID());
-				context.startActivity(open);
-			});
 			v.setOnLongClickListener(v12 -> {
 				ProductDao dao = AppDatabase.getDb(context).productDao();
 				AsyncTask.execute(() -> dao.deleteProduct(product));
@@ -70,18 +62,16 @@ public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.
 			});
 			cl = v;
 			icon = cl.findViewById(R.id.imageView2);
-			tv = cl.findViewById(R.id.textView);
-			sw = cl.findViewById(R.id.switchView);
-
-			sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
-				product.setChecked(isChecked);
-			});
-
+			tv = cl.findViewById(R.id.nameView);
+			amountView = cl.findViewById(R.id.amountView);
+			unitView = cl.findViewById(R.id.unitView);
 		}
 
 		public void setProduct(Product product) {
 			this.product = product;
 			tv.setText(product.getItem().getName());
+			unitView.setText(product.getItem().getUnit());
+			amountView.setText(Integer.toString(product.getAmount()));
 
 			switch(product.getItem().getIconName()) {
 				case "Croissant":

@@ -3,13 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/baseline_bakery_dining_24.xml" value="0.2265" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/baseline_egg_24.xml" value="0.2265" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/baseline_local_pizza_24.xml" value="0.1425" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/baseline_lunch_dining_24.xml" value="0.1425" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1105" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/layout_bg.xml" value="0.2255" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/layout_bg_circle_adaptive.xml" value="0.1425" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/drawable/layout_bg_circle_green.xml" value="0.184" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/activity_add_menu.xml" value="0.33425925925925926" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/activity_entry.xml" value="0.36666666666666664" />
-        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/activity_products.xml" value="0.21979166666666666" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/activity_scanner.xml" value="0.33" />
-        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/item_list_layout.xml" value="0.33" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/item_list_layout.xml" value="0.5" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/layout_bg_xml.xml" value="0.20572916666666666" />
+        <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/product_list_layout.xml" value="0.5" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/sketch_layout.xml" value="0.14722222222222223" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/menu/menu_refresh.xml" value="0.33" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/menu/menu_search.xml" value="0.33" />

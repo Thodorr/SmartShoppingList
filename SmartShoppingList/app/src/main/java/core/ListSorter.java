@@ -24,10 +24,7 @@ public abstract class ListSorter
 		GeneticAlgorithm genetic = new GeneticAlgorithm(is, populationSize);
 
 		List<Integer> orderCopy = new ArrayList<>(order.size());
-		for (Integer i : order)
-		{
-			orderCopy.add(i);
-		}
+		orderCopy.addAll(order);
 
 		for (int i = 0; i < populationSize; i++)
 		{
@@ -53,14 +50,9 @@ public abstract class ListSorter
 		return sorted;
 	}
 
-	public static void Test(IProduct iProduct)
-	{
-
-	}
-
 	public static <T extends IProduct> List<T> sortAlphabeticallyAscending(List<T> items)
 	{
-		List<T> newList = new ArrayList<T>(items);
+		List<T> newList = new ArrayList<>(items);
 		newList.sort(Comparator.comparing(o -> o.getItem().getName()));
 		return newList;
 	}

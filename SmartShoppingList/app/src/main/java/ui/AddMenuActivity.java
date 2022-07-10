@@ -20,8 +20,9 @@ public class AddMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_menu);
 
-        initBtns();
+        setTitle("Add Menu");
 
+        initBtns();
     }
 
     private void initBtns() {

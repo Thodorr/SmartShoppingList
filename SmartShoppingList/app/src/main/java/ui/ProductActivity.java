@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +44,7 @@ public class ProductActivity extends AppCompatActivity
 
 	private RecyclerView listHolder;
 	private FloatingActionButton addProduct;
+	private Button shoppingListButton;
 
 	private ActivityResultLauncher launchScanActivity;
 
@@ -69,11 +71,12 @@ public class ProductActivity extends AppCompatActivity
 
 		listHolder = findViewById(R.id.itemListView);
 		addProduct = findViewById(R.id.addProductButton);
+		shoppingListButton = findViewById(R.id.btnList);
 
 		AppDatabase db = AppDatabase.getDb(this);
 		LiveData<List<Item>> data = db.itemDao().getAll();
 		data.observe(this, items -> {
-			items = (List<Item>) ListSorter.sortGenetic(items, 500, 100);
+			items = (List<Item>) ListSorter.sortAlphabeticallyAscending(items);
 			if (items.isEmpty()) {
 				items.add(new Item("Test", new Vector2(0,0)));
 			}
@@ -84,11 +87,15 @@ public class ProductActivity extends AppCompatActivity
 		Boolean addUsage = (getIntent().hasExtra("add"));
 		itemAdapter = new ItemListAdapter(addUsage);
 		listHolder.setAdapter(itemAdapter);
-		listHolder.setLayoutManager(new LinearLayoutManager(this));
+		listHolder.setLayoutManager(new GridLayoutManager(this, 2));
 
 		addProduct.setOnClickListener(v -> {
 			Intent open = new Intent(this, EntryActivity.class);
 			startActivity(open);
+		});
+
+		shoppingListButton.setOnClickListener(v -> {
+			onBackPressed();
 		});
 	}
 
@@ -120,32 +127,10 @@ public class ProductActivity extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(@NonNull MenuItem item)
-	{
-		switch(item.getItemId())
-		{
-			case R.id.menuItemAlpha:
-				itemList = (List<Item>) ListSorter.sortAlphabeticallyAscending(itemList);
-				itemAdapter.submitList(itemList);
-				//Toast.makeText(this, "Sorted A - Z", Toast.LENGTH_SHORT).show();
-				break;
-			case R.id.menuItemDist:
-			case R.id.menuItemRefresh:
-			default:
-				itemList = (List<Item>) ListSorter.sortGenetic(itemList, 500, 100);
-				itemAdapter.submitList(itemList);
-				//Toast.makeText(this, "Sorted by distance", Toast.LENGTH_SHORT).show();
-		}
-
-		return true;
-	}
-
-	@Override
 	public void onBackPressed()
 	{
-		Intent in = new Intent();
-		in.putExtra(RETURN_VALUE,  (Serializable) selectedProducts);
-		setResult(Activity.RESULT_OK, in);
-		super.onBackPressed();
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
 	}
 }

@@ -40,8 +40,6 @@ public class ScannerActivity extends AppCompatActivity
 	public static String RETURN_VALUE = "item";
 
 	private Button btnBack;
-	private EditText editName;
-	private EditText editPosY;
 
 	private SurfaceView surfaceView;
 	private BarcodeDetector barcodeDetector;
@@ -66,8 +64,6 @@ public class ScannerActivity extends AppCompatActivity
 
 		scanned = false;
 
-		editName = findViewById(R.id.editName);
-		editPosY = findViewById(R.id.editPosY);
 
 		btnBack = findViewById(R.id.btnBack);
 		btnBack.setOnClickListener(new View.OnClickListener()
@@ -184,19 +180,6 @@ public class ScannerActivity extends AppCompatActivity
 
 						barcodeText.setText(barcodeData);
 						toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
-						// TODO: make database entry
-						String name = editName.getText().toString();
-						name = name.isEmpty() ? "Scan" : name;
-						Vector2 pos;
-						try
-						{
-							int shelfNr = Integer.parseInt(editPosY.getText().toString());
-							pos = new Supermarket().getPosition(shelfNr);
-						}
-						catch(NumberFormatException e)
-						{
-							pos = Vector2.zero;
-						}
 
 						scanned = true;
 						Intent intent = new Intent(getApplicationContext(), EntryActivity.class);

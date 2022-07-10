@@ -21,31 +21,24 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.smartshoppinglist.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-import core.IProduct;
-import core.Item;
 import core.AppDatabase;
-import core.ItemDao;
 import core.ListSorter;
 import core.Product;
 import core.ProductDao;
-import math.Vector2;
 
 public class MainActivity extends AppCompatActivity
 {
-	private Button btnRefresh;
-	private Button btnAdd;
-	private Button btnScan;
-	private  Button btnProducts;
-	private RecyclerView listHolder;
+	FloatingActionButton btnAdd;
+	private Button btnProducts;
 
 	private ProductListAdapter productAdapter;
 
-	private ActivityResultLauncher launchScanActivity;
-
-	private int counter = 0;
+	private final int counter = 0;
+	private final String currentSort = "distance";
 
 	private List<Product> productList;
 
@@ -57,12 +50,10 @@ public class MainActivity extends AppCompatActivity
 
 		setTitle("Shopping List");
 
-		btnRefresh = findViewById(R.id.btnRefresh);
 		btnAdd = findViewById(R.id.btnAdd);
-		btnScan = findViewById(R.id.btnScan);
 		btnProducts = findViewById(R.id.btnProducts);
 
-		listHolder = findViewById(R.id.itemListView);
+		RecyclerView listHolder = findViewById(R.id.itemListView);
 
 		AppDatabase db = AppDatabase.getDb(this);
 				LiveData<List<Product>> data = db.productDao().getAll();
@@ -79,17 +70,14 @@ public class MainActivity extends AppCompatActivity
 		listHolder.setAdapter(productAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
 
-		launchScanActivity = registerForActivityResult(
-				new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>()
-				{
+		// TODO: handle scanner result data
+		ActivityResultLauncher launchScanActivity = registerForActivityResult(
+				new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
 					@Override
-					public void onActivityResult(ActivityResult result)
-					{
-						if(result.getResultCode() == Activity.RESULT_OK)
-						{
+					public void onActivityResult(ActivityResult result) {
+						if (result.getResultCode() == Activity.RESULT_OK) {
 							Intent data = result.getData();
-							if(data == null || !data.hasExtra(ScannerActivity.RETURN_VALUE))
-							{
+							if (data == null || !data.hasExtra(ScannerActivity.RETURN_VALUE)) {
 								return;
 							}
 
@@ -97,12 +85,11 @@ public class MainActivity extends AppCompatActivity
 							Bundle bundle = data.getExtras();
 							Product product = (Product) bundle.getParcelable(ScannerActivity.RETURN_VALUE);
 
-							if(product == null)
-							{
+							if (product == null) {
 								System.out.println("Scanner returned null");
 								return;
 							}
-							System.out.println(product.toString());
+							System.out.println(product);
 							addItemToList(product);
 						}
 					}
@@ -146,7 +133,7 @@ public class MainActivity extends AppCompatActivity
 
 	private void initBtns()
 	{
-		if(btnAdd == null || btnRefresh == null)
+		if(btnAdd == null)
 		{
 			return;
 		}
@@ -154,16 +141,6 @@ public class MainActivity extends AppCompatActivity
 		btnAdd.setOnClickListener(view -> {
 			Intent open = new Intent(this, AddMenuActivity.class);
 			startActivity(open);
-		});
-
-		btnScan.setOnClickListener(view -> {
-			Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
-			launchScanActivity.launch(intent);
-		});
-
-		btnRefresh.setOnClickListener(view -> {
-			productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
-			productAdapter.submitList(productList);
 		});
 
 		btnProducts.setOnClickListener(view -> {

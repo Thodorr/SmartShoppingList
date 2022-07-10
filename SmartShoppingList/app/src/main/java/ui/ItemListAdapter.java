@@ -6,9 +6,10 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,16 +29,15 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 	}
 
 	private Context context;
-	private Boolean addUse;
+	private final Boolean addUse;
 
+	@NonNull
 	@Override
 	public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		// create a new view
-		// TODO cast to ConstraintLayout not possible
-		LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.item_list_layout, parent, false);
-		ItemViewHolder vh = new ItemViewHolder(v);
-		return vh;
+		ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.product_list_layout, parent, false);
+		return new ItemViewHolder(v);
 	}
 
 	@Override
@@ -48,12 +48,13 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 	}
 
 	public class ItemViewHolder extends RecyclerView.ViewHolder {
-		public LinearLayout cl;
-		private TextView tv;
-		private ImageView icon;
+		public ConstraintLayout cl;
+		private final TextView tv;
+		private final ImageView icon;
+		private final TextView unitView;
 		private Item item;
 
-		public ItemViewHolder(LinearLayout v)
+		public ItemViewHolder(ConstraintLayout v)
 		{
 			super(v);
 			if (!addUse) {
@@ -69,18 +70,18 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 					return false;
 				});
 			} else {
-				v.setOnClickListener(v1 -> {
-					quickAdd(item);
-				});
+				v.setOnClickListener(v1 -> quickAdd(item));
 			}
 			cl = v;
-			icon = cl.findViewById(R.id.imageView2);
-			tv = cl.findViewById(R.id.textView);
+			icon = cl.findViewById(R.id.imageView);
+			tv = cl.findViewById(R.id.productNameView);
+			unitView = cl.findViewById(R.id.productUnitView);
 		}
 
 		public void setItem(Item item) {
 			this.item = item;
 			tv.setText(item.getName());
+			unitView.setText(item.getUnit());
 
 			System.out.println("Icon: " + item);
 			switch(item.getIconName()) {

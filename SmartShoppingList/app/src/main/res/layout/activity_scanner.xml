@@ -10,7 +10,7 @@
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="656dp" />
 
     <TextView
         android:id="@+id/textCode"
@@ -18,50 +18,6 @@
         android:layout_height="wrap_content"
         android:text="Barcode ID"
         android:textAlignment="center" />
-
-    <TextView
-        android:id="@+id/lblName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Item Name:"
-        android:textAlignment="textStart" />
-
-    <EditText
-        android:id="@+id/editName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:text="Scan" />
-
-    <TextView
-        android:id="@+id/lblPosY"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Shelf Nr:"
-        android:textAlignment="textStart" />
-
-    <EditText
-        android:id="@+id/editPosY"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/lblUnit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Unit:"
-        android:textAlignment="textStart" />
-
-    <EditText
-        android:id="@+id/editUnit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text" />
 
     <Button
         android:id="@+id/btnBack"

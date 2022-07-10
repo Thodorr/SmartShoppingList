@@ -86,7 +86,7 @@ public class EntryActivity extends AppCompatActivity
 		Item item = new Item(name, new Supermarket().getPosition(shelf), ean, unit, iconName);
 
 		if (getIntent().hasExtra("direct")) {
-			Product product = new Product(item, 100, false);
+			Product product = new Product(item, 1, false);
 
 			ProductDao dao = AppDatabase.getDb(this).productDao();
 			AsyncTask.execute(() -> dao.insertProduct(product));
@@ -148,6 +148,7 @@ public class EntryActivity extends AppCompatActivity
 	private void adjustUI()
 	{
 		doButton.setText("Update");
+		setTitle("Update Item");
 	}
 
 	private int getIconIndex(String iconName) {
