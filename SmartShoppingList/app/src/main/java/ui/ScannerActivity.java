@@ -30,6 +30,8 @@ import java.io.IOException;
 
 import core.AppDatabase;
 import core.Item;
+import core.Product;
+import core.ProductDao;
 import core.Supermarket;
 import math.Vector2;
 
@@ -166,9 +168,16 @@ public class ScannerActivity extends AppCompatActivity
 
 						barcodeData = barcodes.valueAt(0).displayValue;
 						checkForExistence(barcodeData, (eanExists) -> {
-							if (eanExists) {
-								Toast.makeText(getApplicationContext(), "Product already exists", Toast.LENGTH_SHORT).show();
+							if (eanExists != null) {
+								Toast.makeText(getApplicationContext(), "Existing product added to list", Toast.LENGTH_SHORT).show();
+
+								Product product = new Product(eanExists, 1, false);
+
+								ProductDao dao = AppDatabase.getDb(getApplicationContext()).productDao();
+								AsyncTask.execute(() -> dao.insertProduct(product));
+
 								Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+								intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 								startActivity(intent);
 							}
 						});
@@ -200,15 +209,14 @@ public class ScannerActivity extends AppCompatActivity
 	}
 
 	interface OnEanListener {
-		void eanChecked(boolean eanExists);
+		void eanChecked(Item eanExists);
 	}
 
 	private void checkForExistence(String ean, OnEanListener callback) {
 		AppDatabase db = AppDatabase.getDb(getApplicationContext());
 		AsyncTask.execute(() -> {
 			Item existItem = db.itemDao().checkForEan(ean);
-			System.out.println(existItem);
-			runOnUiThread(() -> callback.eanChecked(existItem != null));
+			runOnUiThread(() -> callback.eanChecked(existItem));
 		});
 	}
 }

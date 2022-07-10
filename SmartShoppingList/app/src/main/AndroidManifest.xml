@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartShoppingList">
         <activity
+            android:name="ui.AddMenuActivity"
+            android:exported="false" />
+        <activity
             android:name="ui.EntryActivity"
             android:exported="false" />
         <activity

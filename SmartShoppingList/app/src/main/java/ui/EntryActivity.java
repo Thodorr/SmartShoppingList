@@ -14,8 +14,9 @@ import com.example.smartshoppinglist.R;
 import core.AppDatabase;
 import core.Item;
 import core.ItemDao;
+import core.Product;
+import core.ProductDao;
 import math.Vector2;
-import core.Supermarket;
 
 public class EntryActivity extends AppCompatActivity
 {
@@ -76,11 +77,25 @@ public class EntryActivity extends AppCompatActivity
 		String ean = eanField.getText().toString();
 		String iconName = iconSpinner.getSelectedItem().toString();
 
-		Item item = new Item(name, ean, unit, iconName, new Supermarket().getPosition(1));
+		Item item = new Item(name, Vector2.random(0,100f), ean, unit, iconName);
 
-		ItemDao dao = AppDatabase.getDb(this).itemDao();
-		AsyncTask.execute(() -> dao.insertItem(item));
-		finish();
+		if (getIntent().hasExtra("direct")) {
+			Product product = new Product(item, 100, false);
+
+			ProductDao dao = AppDatabase.getDb(this).productDao();
+			AsyncTask.execute(() -> dao.insertProduct(product));
+
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		} else {
+			ItemDao dao = AppDatabase.getDb(this).itemDao();
+			AsyncTask.execute(() -> dao.insertItem(item));
+
+			Intent intent = new Intent(this, ProductActivity.class);
+			startActivity(intent);
+		}
+
 	}
 
 	private void updateItem()

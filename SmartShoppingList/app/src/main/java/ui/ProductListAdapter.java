@@ -3,6 +3,7 @@ package ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +34,10 @@ public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.
 	@Override
 	public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
-		return null;
+		LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.item_list_layout, parent, false);
+		ProductViewHolder vh = new ProductViewHolder(v);
+		return vh;
 	}
 
 	@Override

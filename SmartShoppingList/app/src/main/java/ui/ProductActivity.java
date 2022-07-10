@@ -81,7 +81,8 @@ public class ProductActivity extends AppCompatActivity
 			itemList = items;
 		});
 
-		itemAdapter = new ItemListAdapter();
+		Boolean addUsage = (getIntent().hasExtra("add"));
+		itemAdapter = new ItemListAdapter(addUsage);
 		listHolder.setAdapter(itemAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
 

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.ListAdapter;
@@ -18,14 +17,18 @@ import core.ItemDao;
 import com.example.smartshoppinglist.R;
 
 import core.Item;
+import core.Product;
+import core.ProductDao;
 
 public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewHolder> {
 
-	protected ItemListAdapter() {
+	protected ItemListAdapter( Boolean addUse) {
 		super(new Item.DiffUtil());
+		this.addUse = addUse;
 	}
 
 	private Context context;
+	private Boolean addUse;
 
 	@Override
 	public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,18 +56,23 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 		public ItemViewHolder(LinearLayout v)
 		{
 			super(v);
-			v.setOnClickListener(v1 -> {
-				Intent open = new Intent(context, EntryActivity.class);
-				open.putExtra("itemID", item.getItemID());
-				context.startActivity(open);
-			});
-			/*
-			v.setOnLongClickListener(v12 -> {
-				ItemDao dao = AppDatabase.getDb(context).itemDao();
-				AsyncTask.execute(() -> dao.deleteItem(item));
-				return false;
-			});
-			*/
+			if (!addUse) {
+				v.setOnClickListener(v1 -> {
+					Intent open = new Intent(context, EntryActivity.class);
+					open.putExtra("itemID", item.getItemID());
+					context.startActivity(open);
+				});
+
+				v.setOnLongClickListener(v12 -> {
+					ItemDao dao = AppDatabase.getDb(context).itemDao();
+					AsyncTask.execute(() -> dao.deleteItem(item));
+					return false;
+				});
+			} else {
+				v.setOnClickListener(v1 -> {
+					quickAdd(item);
+				});
+			}
 			cl = v;
 			icon = cl.findViewById(R.id.imageView2);
 			tv = cl.findViewById(R.id.textView);
@@ -104,5 +112,16 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 					break;
 			}
 		}
+	}
+
+	private void quickAdd(Item item) {
+		Product product = new Product(item, 1, false);
+
+		ProductDao dao = AppDatabase.getDb(context).productDao();
+		AsyncTask.execute(() -> dao.insertProduct(product));
+
+		Intent intent = new Intent(context, MainActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		context.startActivity(intent);
 	}
 }
