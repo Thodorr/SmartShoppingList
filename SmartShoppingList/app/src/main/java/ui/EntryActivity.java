@@ -14,6 +14,7 @@ import com.example.smartshoppinglist.R;
 import core.AppDatabase;
 import core.Item;
 import core.ItemDao;
+import math.Vector2;
 import core.Supermarket;
 
 public class EntryActivity extends AppCompatActivity

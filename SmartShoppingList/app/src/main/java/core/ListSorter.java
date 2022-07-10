@@ -9,13 +9,13 @@ import core.Item;
 
 public abstract class ListSorter
 {
-	public static List<Item> sortGenetic(List<Item> items, int populationSize, int maxGenerations)
+	public static List<? extends IProduct> sortGenetic(List<? extends IProduct> items, int populationSize, int maxGenerations)
 	{
 		if (items == null) return null;
 		if (items.isEmpty()) return items;
 		System.out.println("Sorting started");
 
-		Item[] is = new Item[items.size()];
+		IProduct[] is = new IProduct[items.size()];
 		is = items.toArray(is);
 		List<Integer> order = new ArrayList<Integer>();
 		for (int i = 0; i < is.length; i++)
@@ -44,7 +44,7 @@ public abstract class ListSorter
 		}
 
 		List<Integer> bestEver = genetic.getBestEver();
-		ArrayList<Item> sorted = new ArrayList<>(items.size());
+		ArrayList<IProduct> sorted = new ArrayList<>(items.size());
 		for (int i = 0; i < bestEver.size(); i++)
 		{
 			int n = bestEver.get(i);
@@ -55,10 +55,14 @@ public abstract class ListSorter
 		return sorted;
 	}
 
-	public static List<Item> sortAlphabeticallyAscending(List<Item> items)
+	public static void Test(IProduct iProduct)
+	{
+
+	}
+
+	public static List<? extends IProduct> sortAlphabeticallyAscending(List<? extends IProduct> items)
 	{
 		// TODO: implement sorting alphabetically ascending
-		
-		return  new ArrayList<>(items);
+		return  items;
 	}
 }

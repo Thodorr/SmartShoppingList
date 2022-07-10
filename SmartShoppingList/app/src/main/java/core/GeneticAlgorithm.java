@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GeneticAlgorithm
 {
-	private Item[] items;
+	private IProduct[] items;
 
 	private List<List<Integer>> population;
 	private int populationSize;
@@ -17,7 +17,7 @@ public class GeneticAlgorithm
 	private List<Integer> bestEver;
 	private List<Integer> currentBest;
 
-	public GeneticAlgorithm(Item[] items, int populationSize)
+	public GeneticAlgorithm(IProduct[] items, int populationSize)
 	{
 		this.items = items;
 		this.populationSize = populationSize;
@@ -138,16 +138,16 @@ public class GeneticAlgorithm
 		}
 	}
 
-	private float calculateDistance(Item[] items, List<Integer> order)
+	private float calculateDistance(IProduct[] items, List<Integer> order)
 	{
 		float sum = 0f;
 		for (int i = 0; i < order.size() - 1; i++)
 		{
 			int itemAIndex = order.get(i);
-			Item item_A = items[itemAIndex];
+			Item item_A = items[itemAIndex].getItem();
 
 			int itemBIndex = order.get(i + 1);
-			Item item_B = items[itemBIndex];
+			Item item_B = items[itemBIndex].getItem();
 
 			float dst = MathUtility.dist(item_A.getPosition(), item_B.getPosition());
 			sum += dst;
