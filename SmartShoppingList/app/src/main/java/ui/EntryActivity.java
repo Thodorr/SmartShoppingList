@@ -11,11 +11,14 @@ import android.widget.Spinner;
 
 import com.example.smartshoppinglist.R;
 
+import java.util.List;
+
 import core.AppDatabase;
 import core.Item;
 import core.ItemDao;
 import core.Product;
 import core.ProductDao;
+import core.Supermarket;
 import math.Vector2;
 
 public class EntryActivity extends AppCompatActivity
@@ -26,6 +29,7 @@ public class EntryActivity extends AppCompatActivity
 	EditText nameField;
 	EditText unitField;
 	EditText eanField;
+	EditText shelfField;
 	Spinner iconSpinner;
 
 	Item item;
@@ -43,6 +47,7 @@ public class EntryActivity extends AppCompatActivity
 		nameField = findViewById(R.id.editItemName);
 		unitField = findViewById(R.id.editItemUnit);
 		eanField = findViewById(R.id.editItemEAN);
+		shelfField = findViewById(R.id.editItemShelf);
 		iconSpinner = findViewById(R.id.iconSpinner);
 
 		Intent intent = getIntent();
@@ -76,8 +81,9 @@ public class EntryActivity extends AppCompatActivity
 		String unit = unitField.getText().toString();
 		String ean = eanField.getText().toString();
 		String iconName = iconSpinner.getSelectedItem().toString();
+		int shelf = (int) Integer.parseInt(shelfField.getText().toString());
 
-		Item item = new Item(name, Vector2.random(0,100f), ean, unit, iconName);
+		Item item = new Item(name, new Supermarket().getPosition(shelf), ean, unit, iconName);
 
 		if (getIntent().hasExtra("direct")) {
 			Product product = new Product(item, 100, false);
@@ -103,10 +109,14 @@ public class EntryActivity extends AppCompatActivity
 		String name = nameField.getText().toString();
 		String unit = unitField.getText().toString();
 		String ean = eanField.getText().toString();
+		int shelf = (int) Integer.parseInt(shelfField.getText().toString());
+		String iconName = iconSpinner.getSelectedItem().toString();
 
 		item.setName(name);
 		item.setUnit(unit);
 		item.setEan(ean);
+		item.setPosition(new Supermarket().getPosition(shelf));
+		item.setIconName(iconName);
 
 		ItemDao dao = AppDatabase.getDb(this).itemDao();
 		AsyncTask.execute(() -> dao.updateItem(item));
@@ -125,15 +135,31 @@ public class EntryActivity extends AppCompatActivity
 			{
 				return;
 			}
+			int shelf = new Supermarket().getShelfNr(item.getPosition());
 
 			nameField.setText(item.getName());
 			unitField.setText(item.getUnit());
 			eanField.setText(item.getEan());
+			shelfField.setText(Integer.toString(shelf));
+			iconSpinner.setSelection(getIconIndex(item.getIconName()));
 		});
 	}
 
 	private void adjustUI()
 	{
 		doButton.setText("Update");
+	}
+
+	private int getIconIndex(String iconName) {
+		String[] iconNameList = getResources().getStringArray(R.array.iconNames);
+
+		int counter = 0;
+		for (String i : iconNameList) {
+			if (i.equals(iconName)) {
+				return counter;
+			}
+			counter++;
+		}
+		return -1;
 	}
 }

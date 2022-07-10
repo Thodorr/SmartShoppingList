@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SmartShoppingList</string>
 
-    <string-array name="iconNames">
+    <string-array name="iconNames" key="iconNames">
         <item>Burger</item>
         <item>Meat</item>
         <item>Coffee</item>

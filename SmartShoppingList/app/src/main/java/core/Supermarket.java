@@ -35,6 +35,6 @@ public class Supermarket
 			return -1;
 		}
 
-		return width * (int)pos.y + (int)pos.x;
+		return (int) width * (int)pos.y + (int)pos.x;
 	}
 }
