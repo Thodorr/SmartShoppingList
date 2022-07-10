@@ -113,6 +113,11 @@ public class Product implements Parcelable, IProduct
 		return Objects.hash(productID, item);
 	}
 
+	@Override
+	public String toString() {
+		return item.getName() + ": " +item.getPosition();
+	}
+
 	public static class DiffUtil extends androidx.recyclerview.widget.DiffUtil.ItemCallback<Product> {
 		@Override
 		public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {

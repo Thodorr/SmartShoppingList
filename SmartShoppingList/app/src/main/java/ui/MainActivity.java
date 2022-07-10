@@ -127,15 +127,18 @@ public class MainActivity extends AppCompatActivity
 		{
 			case R.id.menuItemAlpha:
 				productList = (List<Product>) ListSorter.sortAlphabeticallyAscending(productList);
+				System.out.println(productList);
 				productAdapter.submitList(productList);
-				//Toast.makeText(this, "Sorted A - Z", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Sorted alphabetically", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.menuItemDist:
 			case R.id.menuItemRefresh:
 			default:
 				productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
+				System.out.println(productList);
 				productAdapter.submitList(productList);
-				//Toast.makeText(this, "Sorted by distance", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Sorted by distance", Toast.LENGTH_SHORT).show();
+				break;
 		}
 
 		return true;

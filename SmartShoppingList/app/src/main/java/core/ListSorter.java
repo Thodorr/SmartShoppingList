@@ -2,10 +2,8 @@ package core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import core.GeneticAlgorithm;
-import core.Item;
 
 public abstract class ListSorter
 {
@@ -17,7 +15,7 @@ public abstract class ListSorter
 
 		IProduct[] is = new IProduct[items.size()];
 		is = items.toArray(is);
-		List<Integer> order = new ArrayList<Integer>();
+		List<Integer> order = new ArrayList<>();
 		for (int i = 0; i < is.length; i++)
 		{
 			order.add(i);
@@ -25,7 +23,7 @@ public abstract class ListSorter
 
 		GeneticAlgorithm genetic = new GeneticAlgorithm(is, populationSize);
 
-		List<Integer> orderCopy = new ArrayList<Integer>(order.size());
+		List<Integer> orderCopy = new ArrayList<>(order.size());
 		for (Integer i : order)
 		{
 			orderCopy.add(i);
@@ -60,9 +58,10 @@ public abstract class ListSorter
 
 	}
 
-	public static List<? extends IProduct> sortAlphabeticallyAscending(List<? extends IProduct> items)
+	public static <T extends IProduct> List<T> sortAlphabeticallyAscending(List<T> items)
 	{
-		// TODO: implement sorting alphabetically ascending
-		return  items;
+		List<T> newList = new ArrayList<T>(items);
+		newList.sort(Comparator.comparing(o -> o.getItem().getName()));
+		return newList;
 	}
 }
