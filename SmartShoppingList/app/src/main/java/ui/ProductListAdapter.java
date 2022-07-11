@@ -3,7 +3,9 @@ package ui;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +52,7 @@ public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.
 		private final TextView amountView;
 		private final TextView unitView;
 		private Product product;
+		private View moreButton;
 
 
 		public ProductViewHolder(ConstraintLayout v)
@@ -65,6 +68,7 @@ public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.
 			tv = cl.findViewById(R.id.nameView);
 			amountView = cl.findViewById(R.id.amountView);
 			unitView = cl.findViewById(R.id.unitView);
+			moreButton = cl.findViewById(R.id.moreButton);
 		}
 
 		public void setProduct(Product product) {
@@ -72,6 +76,12 @@ public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.
 			tv.setText(product.getItem().getName());
 			unitView.setText(product.getItem().getUnit());
 			amountView.setText(Integer.toString(product.getAmount()));
+			moreButton.setOnClickListener(v -> {
+				System.out.println("test");
+				product.setAmount(product.getAmount() + 1);
+				ProductDao dao = AppDatabase.getDb(context).productDao();
+				AsyncTask.execute(() -> dao.updateProduct(product));
+			});
 
 			switch(product.getItem().getIconName()) {
 				case "Croissant":
