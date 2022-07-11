@@ -2,14 +2,17 @@ package ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +55,7 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 		private final TextView tv;
 		private final ImageView icon;
 		private final TextView unitView;
+		private View iconHolder;
 		private Item item;
 
 		public ItemViewHolder(ConstraintLayout v)
@@ -70,11 +74,12 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 					return false;
 				});
 			} else {
-				v.setOnClickListener(v1 -> quickAdd(item));
+				v.setOnClickListener(v1 -> quickAdd(item, iconHolder));
 			}
 			cl = v;
 			icon = cl.findViewById(R.id.imageView);
 			tv = cl.findViewById(R.id.productNameView);
+			iconHolder = cl.findViewById(R.id.iconHolder);
 			unitView = cl.findViewById(R.id.productUnitView);
 		}
 
@@ -115,8 +120,11 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 		}
 	}
 
-	private void quickAdd(Item item) {
+	private void quickAdd(Item item, View iconHolder) {
 		Product product = new Product(item, 1, false);
+
+		Drawable redCircle = ContextCompat.getDrawable(context, R.drawable.layout_bg_circle_red);
+		iconHolder.setBackground(redCircle);
 
 		ProductDao dao = AppDatabase.getDb(context).productDao();
 		AsyncTask.execute(() -> dao.insertProduct(product));
