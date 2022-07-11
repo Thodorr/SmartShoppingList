@@ -128,9 +128,5 @@ public class ItemListAdapter extends ListAdapter<Item, ItemListAdapter.ItemViewH
 
 		ProductDao dao = AppDatabase.getDb(context).productDao();
 		AsyncTask.execute(() -> dao.insertProduct(product));
-
-		Intent intent = new Intent(context, MainActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		context.startActivity(intent);
 	}
 }

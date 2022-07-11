@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.smartshoppinglist.R;
-
-import java.util.List;
 
 import core.AppDatabase;
 import core.Item;
@@ -19,7 +18,6 @@ import core.ItemDao;
 import core.Product;
 import core.ProductDao;
 import core.Supermarket;
-import math.Vector2;
 
 public class EntryActivity extends AppCompatActivity
 {
@@ -81,7 +79,11 @@ public class EntryActivity extends AppCompatActivity
 		String unit = unitField.getText().toString();
 		String ean = eanField.getText().toString();
 		String iconName = iconSpinner.getSelectedItem().toString();
-		int shelf = (int) Integer.parseInt(shelfField.getText().toString());
+		String shelfInput = shelfField.getText().toString();
+
+		if (!checkInput(name, shelfInput)) return;
+
+		int shelf = (int) Integer.parseInt(shelfInput);
 
 		Item item = new Item(name, new Supermarket().getPosition(shelf), ean, unit, iconName);
 
@@ -109,8 +111,12 @@ public class EntryActivity extends AppCompatActivity
 		String name = nameField.getText().toString();
 		String unit = unitField.getText().toString();
 		String ean = eanField.getText().toString();
-		int shelf = (int) Integer.parseInt(shelfField.getText().toString());
 		String iconName = iconSpinner.getSelectedItem().toString();
+		String shelfInput = shelfField.getText().toString();
+
+		if (!checkInput(name, shelfInput)) return;
+
+		int shelf = (int) Integer.parseInt(shelfInput);
 
 		item.setName(name);
 		item.setUnit(unit);
@@ -162,5 +168,21 @@ public class EntryActivity extends AppCompatActivity
 			counter++;
 		}
 		return -1;
+	}
+
+	private Boolean checkInput(String name, String shelfString) {
+		if (name.isEmpty()) {
+			Toast.makeText(getApplicationContext(), "Product must have a Name!", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (shelfString.isEmpty()) {
+			Toast.makeText(getApplicationContext(), "Product must have a Shelf!", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (Integer.parseInt(shelfString) >= 9) {
+			Toast.makeText(getApplicationContext(), "Shelfnumber too high", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
 	}
 }

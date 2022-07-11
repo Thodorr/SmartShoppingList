@@ -1,16 +1,11 @@
 package ui;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,8 +32,8 @@ public class MainActivity extends AppCompatActivity
 
 	private ProductListAdapter productAdapter;
 
-	private final int counter = 0;
-	private final String currentSort = "distance";
+	private String currentSort = "dist";
+	String message = "Sorted by distance";
 
 	private List<Product> productList;
 
@@ -58,10 +53,7 @@ public class MainActivity extends AppCompatActivity
 		AppDatabase db = AppDatabase.getDb(this);
 				LiveData<List<Product>> data = db.productDao().getAll();
 		data.observe(this, products -> {
-			products = (List<Product>) ListSorter.sortGenetic(products, 500, 100);
-			if (products.isEmpty()) {
-				// TODO: ist hier ein Default Objekt nötig?
-			}
+			products = (List<Product>) ListSorter.sortAlphabeticallyAscending(products);
 			productAdapter.submitList(products);
 			productList = products;
 		});
@@ -69,32 +61,6 @@ public class MainActivity extends AppCompatActivity
 		productAdapter = new ProductListAdapter();
 		listHolder.setAdapter(productAdapter);
 		listHolder.setLayoutManager(new LinearLayoutManager(this));
-
-		// TODO: handle scanner result data
-		ActivityResultLauncher launchScanActivity = registerForActivityResult(
-				new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-					@Override
-					public void onActivityResult(ActivityResult result) {
-						if (result.getResultCode() == Activity.RESULT_OK) {
-							Intent data = result.getData();
-							if (data == null || !data.hasExtra(ScannerActivity.RETURN_VALUE)) {
-								return;
-							}
-
-							// TODO: handle scanner result data
-							Bundle bundle = data.getExtras();
-							Product product = (Product) bundle.getParcelable(ScannerActivity.RETURN_VALUE);
-
-							if (product == null) {
-								System.out.println("Scanner returned null");
-								return;
-							}
-							System.out.println(product);
-							addItemToList(product);
-						}
-					}
-				}
-		);
 
 		initBtns();
 	}
@@ -114,20 +80,25 @@ public class MainActivity extends AppCompatActivity
 		{
 			case R.id.menuItemAlpha:
 				productList = (List<Product>) ListSorter.sortAlphabeticallyAscending(productList);
-				System.out.println(productList);
-				productAdapter.submitList(productList);
-				Toast.makeText(this, "Sorted alphabetically", Toast.LENGTH_SHORT).show();
+				currentSort = "alpha";
+				message = "Sorted alphabetically";
 				break;
 			case R.id.menuItemDist:
 			case R.id.menuItemRefresh:
+				if (currentSort.equals("dist")) {
+					productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
+				} else {
+					productList = (List<Product>) ListSorter.sortAlphabeticallyAscending(productList);
+				}
+				break;
 			default:
 				productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
-				System.out.println(productList);
-				productAdapter.submitList(productList);
-				Toast.makeText(this, "Sorted by distance", Toast.LENGTH_SHORT).show();
+				currentSort = "dist";
+				message = "Sorted by distance";
 				break;
 		}
-
+		productAdapter.submitList(productList);
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 		return true;
 	}
 

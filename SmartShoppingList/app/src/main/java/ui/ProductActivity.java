@@ -91,10 +91,16 @@ public class ProductActivity extends AppCompatActivity
 		listHolder.setAdapter(itemAdapter);
 		listHolder.setLayoutManager(new GridLayoutManager(this, 2));
 
-		addProduct.setOnClickListener(v -> {
-			Intent open = new Intent(this, EntryActivity.class);
-			startActivity(open);
-		});
+		if (!addUsage) {
+			addProduct.setOnClickListener(v -> {
+				Intent open = new Intent(this, EntryActivity.class);
+				startActivity(open);
+			});
+		} else {
+			addProduct.setImageResource(R.drawable.ic_baseline_check_24);
+			addProduct.setOnClickListener(v -> onBackPressed());
+		}
+
 
 		shoppingListButton.setOnClickListener(v -> {
 			onBackPressed();
