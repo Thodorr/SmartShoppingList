@@ -23,10 +23,19 @@
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/layout/sketch_layout.xml" value="0.14722222222222223" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/menu/menu_refresh.xml" value="0.33" />
         <entry key="..\:/Studium/Kurse/Android-Praktikum/Projekte/androidprk_smartshoppinglist/SmartShoppingList/app/src/main/res/menu/menu_search.xml" value="0.33" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2845" />
+        <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2845" />
+        <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2845" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2845" />
+        <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.2845" />
+        <entry key="app/src/main/res/layout/activity_add_menu.xml" value="0.29936594202898553" />
+        <entry key="app/src/main/res/layout/activity_entry.xml" value="0.29936594202898553" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34193840579710144" />
         <entry key="app/src/main/res/layout/activity_scanner.xml" value="0.29936594202898553" />
         <entry key="app/src/main/res/layout/item_list_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/sketch_layout.xml" value="0.29936594202898553" />
+        <entry key="app/src/main/res/menu/menu_refresh.xml" value="0.33" />
+        <entry key="app/src/main/res/menu/menu_test.xml" value="0.35625" />
       </map>
     </option>
   </component>
