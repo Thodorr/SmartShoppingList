@@ -47,7 +47,6 @@ public class ProductActivity extends AppCompatActivity
 	private FloatingActionButton addProduct;
 	private Button shoppingListButton;
 
-	private ActivityResultLauncher launchScanActivity;
 
 	private int counter = 0;
 
@@ -103,7 +102,9 @@ public class ProductActivity extends AppCompatActivity
 
 
 		shoppingListButton.setOnClickListener(v -> {
-			onBackPressed();
+			Intent intent = new Intent(this, MainActivity.class);
+			startActivity(intent);
+			overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
 		});
 	}
 

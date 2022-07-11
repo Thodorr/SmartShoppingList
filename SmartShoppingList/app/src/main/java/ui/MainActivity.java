@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity
 		btnProducts.setOnClickListener(view -> {
 			Intent open = new Intent(this, ProductActivity.class);
 			startActivity(open);
+			overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
 		});
 	}
 
