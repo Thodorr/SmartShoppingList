@@ -26,6 +26,9 @@ public interface ItemDao {
     @Insert
     void insertItem(Item item);
 
+    @Insert
+    void insertItems(Item[] items);
+
     @Delete
     void deleteItem(Item item);
 

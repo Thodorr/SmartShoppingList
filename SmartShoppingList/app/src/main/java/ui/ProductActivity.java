@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.AppDatabase;
+import core.DatabaseFiller;
 import core.Item;
 import core.ItemDao;
 import core.ListSorter;
@@ -78,7 +79,8 @@ public class ProductActivity extends AppCompatActivity
 		data.observe(this, items -> {
 			items = (List<Item>) ListSorter.sortAlphabeticallyAscending(items);
 			if (items.isEmpty()) {
-				items.add(new Item("Test", new Vector2(0,0)));
+				DatabaseFiller filler = new DatabaseFiller();
+				filler.fillDatabase(context);
 			}
 			itemAdapter.submitList(items);
 			itemList = items;
