@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.smartshoppinglist.R;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity
 {
 	FloatingActionButton btnAdd;
 	private Button btnProducts;
+	private TextView noItemsView;
 
 	private ProductListAdapter productAdapter;
 
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity
 
 		btnAdd = findViewById(R.id.btnAdd);
 		btnProducts = findViewById(R.id.btnProducts);
+		noItemsView = findViewById(R.id.noItemView);
+		noItemsView.setVisibility(View.GONE);
 
 		RecyclerView listHolder = findViewById(R.id.itemListView);
 
@@ -54,6 +59,9 @@ public class MainActivity extends AppCompatActivity
 				LiveData<List<Product>> data = db.productDao().getAll();
 		data.observe(this, products -> {
 			products = (List<Product>) ListSorter.sortAlphabeticallyAscending(products);
+			if (products.isEmpty()) {
+				noItemsView.setVisibility(View.VISIBLE);
+			}
 			productAdapter.submitList(products);
 			productList = products;
 		});

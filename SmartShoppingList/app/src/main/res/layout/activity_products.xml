@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:maxHeight="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/addProductButton"
+        app:layout_constraintBottom_toTopOf="@+id/btnList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
