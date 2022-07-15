@@ -87,7 +87,6 @@ public class Item implements Parcelable, IProduct
 		this.name = name;
 	}
 
-
 	public int getItemID()
 	{
 		return itemID;

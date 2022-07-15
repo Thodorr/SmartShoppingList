@@ -92,7 +92,12 @@ public class MainActivity extends AppCompatActivity
 				message = "Sorted alphabetically";
 				break;
 			case R.id.menuItemDist:
+				productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
+				currentSort = "dist";
+				message = "Sorted by distance";
+				break;
 			case R.id.menuItemRefresh:
+				System.out.println(currentSort);
 				if (currentSort.equals("dist")) {
 					productList = (List<Product>) ListSorter.sortGenetic(productList, 500, 100);
 				} else {

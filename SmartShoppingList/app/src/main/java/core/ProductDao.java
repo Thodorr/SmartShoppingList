@@ -15,12 +15,6 @@ public interface ProductDao
 	@Query("SELECT * FROM product")
 	LiveData<List<Product>> getAll();
 
-	@Query("SELECT * FROM product WHERE productID = :id")
-	Product getProduct(int id);
-
-	@Query("SELECT * FROM product WHERE name LIKE '%' || :search || '%'")
-	List<Product> getBySearch(String search);
-
 	@Insert
 	void insertProduct(Product product);
 
