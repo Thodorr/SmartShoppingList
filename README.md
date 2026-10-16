@@ -1,10 +1,13 @@
 # SmartShoppingList
 
+![Android](https://img.shields.io/badge/Android-9%2B-3DDC84?logo=android&logoColor=white)
+![Java](https://img.shields.io/badge/Java-8-ED8B00?logo=openjdk&logoColor=white)
+![Room](https://img.shields.io/badge/Room-2.4.2-3DDC84?logo=android&logoColor=white)
+![Route%20Sorting](https://img.shields.io/badge/Route%20Sorting-Genetic%20Algorithm-FF6F00)
+
 An Android shopping-list app with a local product catalogue, barcode scanning and route-aware list sorting.
 
 SmartShoppingList lets users create products with a shelf location, add them to a shopping list and sort that list either alphabetically or by the shortest order through the supermarket. The route order is calculated with a custom genetic algorithm.
-
-> **Status:** Student project
 
 ## Features
 
